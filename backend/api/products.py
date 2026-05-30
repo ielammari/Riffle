@@ -4,11 +4,13 @@ import requests
 from flask import Blueprint, jsonify
 
 import backend.dummyjson as dummyjson
+from backend.auth import login_required
 
 bp = Blueprint("products", __name__, url_prefix="/api")
 
 
 @bp.get("/products/<int:product_id>")
+@login_required
 def product(product_id):
     try:
         data = dummyjson.get_product(product_id)
