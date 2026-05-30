@@ -6,6 +6,7 @@ from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
 
 import models  # noqa: F401  (import registers models on db.metadata for create_all)
+from api import register_api
 from config import INSTANCE_DIR, Config
 from extensions import db
 
@@ -22,6 +23,8 @@ def create_app():
     os.makedirs(INSTANCE_DIR, exist_ok=True)
     with app.app_context():
         db.create_all()
+
+    register_api(app)
 
     @app.get("/api/health")
     def health():
