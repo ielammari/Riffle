@@ -1,0 +1,106 @@
+/* RIFFLE design tokens */
+
+:root {
+
+    /* ---- Cyan accent ramp (base #00fff3) ---- */
+    --cyan-50:#e6fffe;  --cyan-100:#b3fffb; --cyan-200:#80fff8; --cyan-300:#4dfff6;
+    --cyan-400:#1afff4;  --cyan-500:#00fff3;
+    --cyan-600:#00ccc2;  --cyan-700:#009991; --cyan-800:#006661; --cyan-900:#003330;
+
+    /* ---- Cool gray ramp + black ---- */
+    --gray-0:#ffffff;  --gray-50:#f4f6f6;  --gray-100:#e4e8e8; --gray-200:#c6cccc;
+    --gray-300:#9aa2a2; --gray-400:#6f7777; --gray-500:#4c5252; --gray-600:#343939;
+    --gray-700:#232626; --gray-800:#161818; --gray-900:#0c0d0d; --black:#000000;
+
+    /* ---- Surfaces (dark) ---- */
+    --color-bg-page:#000000;
+    --color-bg-surface:#111313;
+    --color-bg-surface-2:#1a1d1d;
+    --color-bg-image-tile:#f5f7f7;
+
+    /* ---- Text ---- */
+    --color-text-primary:#f4f6f6;
+    --color-text-secondary:var(--gray-300);
+    --color-text-muted:var(--gray-400);
+    --color-text-on-accent:#000000;
+
+    /* ---- Accent / interactive ---- */
+    --color-accent:var(--cyan-500);
+    --color-accent-hover:var(--cyan-400);
+    --color-accent-press:var(--cyan-600);
+    --color-accent-soft:rgba(0,255,243,.12);
+    --color-focus:var(--cyan-500);
+
+    /* ---- Borders ---- */
+    --color-border:var(--gray-700);
+    --color-border-strong:var(--gray-600);
+    --color-border-accent:var(--cyan-700);
+
+    /* ---- Swipe-direction cues (on-palette) ---- */
+    --swipe-right:var(--cyan-500); --swipe-right-soft:rgba(0,255,243,.18);
+    --swipe-down:var(--cyan-300);  --swipe-down-soft:rgba(77,255,246,.14);
+    --swipe-left:var(--gray-400);  --swipe-left-soft:rgba(111,119,119,.20);
+
+    /* ---- Status (functional only) + discount ---- */
+    --color-success:var(--cyan-500);
+    --color-danger:#ff5d6c;
+    --color-discount:var(--cyan-500);
+
+    /* ---- Glow / shadow (cyan-tinted on dark) ---- */
+    --glow-accent:0 0 0 3px rgba(0,255,243,.30);
+    --glow-accent-lg:0 0 24px rgba(0,255,243,.35);
+    --shadow-card:0 6px 20px rgba(0,0,0,.55);
+    --shadow-card-hover:0 12px 32px rgba(0,0,0,.65);
+    --shadow-header:0 2px 12px rgba(0,0,0,.6);
+
+    /* ---- Motion ---- */
+    --dur-fast:150ms; --dur-base:250ms; --dur-slow:400ms;
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --ease-in-out:cubic-bezier(.65,0,.35,1);
+    --ease-spring:cubic-bezier(.34,1.56,.64,1); /* spring-back */
+    --ease-fling:cubic-bezier(.4,0,.2,1);
+
+    /* ---- Typography ---- */
+    --font-body: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --text-xs:   0.70rem;
+    --text-sm:   0.813rem;
+    --text-base: 0.938rem;
+    --text-md:   1rem;
+    --text-lg:   1.125rem;
+    --text-xl:   1.9rem;
+
+    /* ---- Spacing scale ---- */
+    --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+    --space-5: 20px; --space-6: 24px; --space-7: 28px; --space-8: 32px;
+
+    /* ---- Layout ---- */
+    --header-height: 56px;
+    --sidebar-width: 270px;
+    --content-max-width: 100vw;
+
+    /* ---- Radius scale ---- */
+    --radius-sm: 3px;
+    --radius-md: 5px;
+    --radius-lg: 8px;
+    --radius-pill: 999px;
+
+    /* ---- Transition aliases (built on the motion tokens) ---- */
+    --transition-fast: var(--dur-fast) var(--ease-out);
+    --transition-base: var(--dur-base) var(--ease-out);
+
+    /* Prototype reskin shims */
+    --color-brand-dark:   var(--gray-900);
+    --color-brand-accent: var(--color-accent);
+    --color-brand-cta:    var(--color-accent-press);
+    --color-discount-badge: var(--color-discount);
+    --color-star:         var(--color-accent);
+
+    --color-bg-card:    var(--color-bg-surface);
+    --color-bg-sidebar: var(--gray-900);
+
+    --color-text-on-dark: var(--color-text-primary);
+    --color-text-price:   var(--color-text-primary);
+    --color-text-strike:  var(--color-text-muted);
+
+    --color-border-focus: var(--color-focus);
+}
