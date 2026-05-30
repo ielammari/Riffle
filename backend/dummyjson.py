@@ -2,9 +2,9 @@
 
 import requests
 
-from config import Config
-from extensions import db
-from models import ProductCache, utcnow
+from backend.config import Config
+from backend.extensions import db
+from backend.models import ProductCache, utcnow
 
 BASE_URL = Config.DUMMYJSON_BASE
 TIMEOUT = Config.REQUEST_TIMEOUT

@@ -5,10 +5,10 @@ import os
 from pathlib import Path
 from flask import Flask, jsonify, send_from_directory
 
-import models  # noqa: F401  (import registers models on db.metadata for create_all)
-from api import register_api
-from config import INSTANCE_DIR, Config
-from extensions import db
+from backend import models  # noqa: F401  (import registers models on db.metadata for create_all)
+from backend.api import register_api
+from backend.config import INSTANCE_DIR, Config
+from backend.extensions import db
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 

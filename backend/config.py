@@ -1,6 +1,7 @@
 # Application configuration.
 # Needed for TTL, ranking weights, currency, the DummyJSON base URL, and cache settings.
 
+import os
 from pathlib import Path
 
 # The SQLite DB lives in instance/ at the root.
@@ -14,3 +15,7 @@ class Config:
 
     DUMMYJSON_BASE = "https://dummyjson.com"
     REQUEST_TIMEOUT = 10
+
+    SECRET_KEY = os.environ.get("RIFFLE_SECRET_KEY", "dev-insecure-change-me")
+    SESSION_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_HTTPONLY = True

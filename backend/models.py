@@ -3,7 +3,7 @@
 
 from datetime import datetime, timezone
 
-from extensions import db
+from backend.extensions import db
 
 
 def utcnow():
