@@ -11,3 +11,6 @@ INSTANCE_DIR = BASE_DIR / "instance"
 class Config:
     SQLALCHEMY_DATABASE_URI = f"sqlite:///{INSTANCE_DIR / 'app.db'}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    DUMMYJSON_BASE = "https://dummyjson.com"
+    REQUEST_TIMEOUT = 10
