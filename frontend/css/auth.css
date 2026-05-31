@@ -1,0 +1,204 @@
+/* Auth card + form, and the header account menu. */
+
+.auth {
+    min-height: 60vh;
+    display: grid;
+    place-items: center;
+    padding: var(--space-6) var(--space-4);
+}
+
+.auth__card {
+    width: min(400px, 100%);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7);
+    box-shadow: var(--shadow-card);
+}
+
+.auth__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    font-size: 1.35rem;
+    margin-bottom: var(--space-2);
+}
+
+.auth__sub {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+}
+
+.auth__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.field label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+
+.field__opt {
+    color: var(--color-text-muted);
+    font-weight: 400;
+}
+
+.field input {
+    height: 46px;
+    padding: 0 var(--space-4);
+    background: var(--color-bg-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: var(--text-base);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--color-border-accent);
+    box-shadow: var(--glow-accent);
+}
+
+.field input.is-invalid {
+    border-color: var(--color-danger);
+}
+
+.field__pw {
+    position: relative;
+    display: flex;
+}
+
+.field__pw input {
+    flex: 1;
+    padding-right: 68px;
+}
+
+.pw-toggle {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 34px;
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--color-accent);
+    background: transparent;
+    font-size: var(--text-sm);
+    font-weight: 600;
+}
+
+.pw-toggle:hover {
+    background: var(--color-bg-elevated);
+}
+
+.auth__error {
+    color: var(--color-danger);
+    font-size: var(--text-sm);
+    background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-danger) 35%, transparent);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+}
+
+.auth__submit {
+    width: 100%;
+    margin-top: var(--space-2);
+}
+
+.auth__submit.is-loading {
+    opacity: 0.75;
+    cursor: progress;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.auth__switch {
+    margin-top: var(--space-5);
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+}
+
+.linkbtn {
+    color: var(--color-accent);
+    background: transparent;
+    font-weight: 600;
+    font-size: inherit;
+    padding: 0 4px;
+}
+
+.linkbtn:hover {
+    text-decoration: underline;
+}
+
+/* ---- Header account menu ---- */
+.account {
+    position: relative;
+}
+
+.account__menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 210px;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card-hover);
+    padding: var(--space-2);
+    z-index: 200;
+    animation: view-in var(--dur-fast) var(--ease-out);
+}
+
+.account__menu[hidden] {
+    display: none;
+}
+
+.account__menu-head {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--space-2);
+}
+
+.account__menu-head strong {
+    color: var(--color-text-secondary);
+}
+
+.account__item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    font-size: var(--text-base);
+    background: transparent;
+    transition: background var(--transition-fast);
+}
+
+.account__item:hover {
+    background: var(--color-bg-surface-2);
+}
+
+.account__item--danger {
+    color: var(--color-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .account__menu { animation: none; }
+    .btn:active { transform: none; }
+}
