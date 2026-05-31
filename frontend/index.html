@@ -1,108 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta name="description" content="Riffle, a swipe-to-decide storefront. Decide as you go." />
     <title>Riffle</title>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syncopate:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/toast.css" />
 </head>
 <body>
-<header class="site-header">
-    <div class="header-container">
-        <button class="menu-btn" id="menu-btn"> ☰ </button>
-        <a href="index.html" class="site-logo">
-            <img src="" class="logo" alt="brand logo"/>
-        </a>
-        <div class="search-bar">
-            <input type="search"
-                   class="search-input"
-                   id="search-input"
-                   placeholder="Search a product"
-                   aria-label="Search products"/>
-            <button class="search-btn" id="search-btn">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </div>
-        <div class="header-actions">
-            <a href="/log-in-page" class="action-btn">
-                <i class="fa-regular fa-user"></i>
-                <span class="label">Log in</span>
+    <header class="app-header" id="app-header">
+        <div class="app-header__inner">
+            <a class="brand" href="#/" aria-label="Riffle — home">
+                <svg class="brand__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="6" width="13" height="15" rx="2" />
+                    <path d="M8 6V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-1" />
+                </svg>
+                <span class="brand__name">RIFFLE</span>
             </a>
-            <a href="/cart-page" class="action-btn">
-                <i class="fa-solid fa-bag-shopping"></i>
-                <span class="label">My cart</span>
-                <span class="badge" id="cart-count">0</span>
-            </a>
-        </div>
-    </div>
-</header>
 
-<div class="nav-overlay" id="nav-overlay"></div>
-<nav class="category-nav" id="category-nav">
-    <div class="category-nav-header">
-        <span>Categories</span>
-        <button class="category-nav-close-btn" id="category-nav-close-btn">✕</button>
-    </div>
-    <ul class="category-list" id="category-list">
-        <li><a href="#" class="category-link active" data-category="all">All Products</a></li>
-    </ul>
-</nav>
+            <nav class="app-nav" aria-label="Primary">
+                <button class="iconbtn" id="nav-tray" type="button" aria-label="Second Thoughts">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 7v5l3 2" />
+                    </svg>
+                    <span class="badge" id="tray-badge" hidden>0</span>
+                </button>
+                <button class="iconbtn" id="nav-cart" type="button" aria-label="Cart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                        <path d="M3 6h18" />
+                        <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                    <span class="badge" id="cart-badge" hidden>0</span>
+                </button>
+                <div class="account" id="account"></div>
+            </nav>
+        </div>
+    </header>
 
-<main class="main" id="main">
-    <div class="main-container">
-        <div class="results-info">
-            <span class="results-header" id="results-count">Results (<strong>0</strong>)</span><br/>
-            <span class="results-comment">Check out each product category for more options.</span>
-        </div>
-        <div class="sort-controls">
-            <label class="sort-header" for="sort-select">Sort by :</label>
-            <select class="sort-select" id="sort-select">
-                <option value="default">All Featured</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="rating">Top Rated</option>
-                <option value="discount">Top Discounts</option>
-            </select>
-        </div>
-        <div class="loading-state" id="loading-state">
-            <div class="spinner"></div>
-            <p>&nbsp;&nbsp;Loading ...</p>
-        </div>
-        <div class="products-grid" id="products-grid"></div>
-        <div class="pagination" id="pagination">
-            <button class="pagination-btn" id="previous-page" disabled><</button>
-            <span id="pagination-number" class="page-number">1</span>
-            <button class="pagination-btn" id="next-page">></button>
-        </div>
-    </div>
-</main>
-<footer class="site-footer">
-    <div class="footer-container">
-        <div class="footer-brand">
-            <a href="index.html" class="site-logo">
-                <img src="" class="logo" alt="brand logo"/>
-            </a>
-            <p class="promotional-comment"></p>
-            <p class="promotional-comment"></p>
-            <p class="promotional-comment"></p>
-            <div class="social-links">
-                <a href="" class="social-link">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="" class="social-link">
-                    <i class="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="" class="social-link">
-                    <i class="fa-brands fa-linkedin-in"></i>
-                </a>
-            </div>
-        </div>
-        <div class="footer-customer-services"></div>
-    </div>
-</footer>
-<script language="JavaScript" src="js/script.js"></script>
-<script language="JavaScript" src="js/APIs.js"></script>
+    <main class="app-view" id="app-view" tabindex="-1"></main>
+
+    <div class="toast-region" id="toast-region" role="region" aria-live="polite" aria-label="Notifications"></div>
+    <div class="modal-root" id="modal-root"></div>
+
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>
