@@ -8,6 +8,7 @@ def register_api(app):
     from .deck import bp as deck_bp
     from .parse import bp as parse_bp
     from .products import bp as products_bp
+    from .reset import bp as reset_bp
     from .second_thoughts import bp as second_thoughts_bp
     from .swipe import bp as swipe_bp
 
@@ -17,5 +18,6 @@ def register_api(app):
     app.register_blueprint(deck_bp)
     app.register_blueprint(parse_bp)
     app.register_blueprint(products_bp)
+    app.register_blueprint(reset_bp)
     app.register_blueprint(second_thoughts_bp)
     app.register_blueprint(swipe_bp)
