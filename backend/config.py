@@ -19,3 +19,13 @@ class Config:
     SECRET_KEY = os.environ.get("RIFFLE_SECRET_KEY", "dev-insecure-change-me")
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_HTTPONLY = True
+
+    CURRENCY = "$"
+    DECK_LIMIT_DEFAULT = 12
+    DECK_LIMIT_MAX = 30
+    DECK_CANDIDATE_LIMIT = 100
+
+    RANKING_WEIGHTS = {"rating": 0.55, "review": 0.15, "stock": 0.10, "discount": 0.10, "query": 0.10}
+    RANKING_RATING_BIAS = 0.15
+    RANKING_DISCOUNT_BIAS = 0.10
+    RANKING_PRICE_BIAS = 0.10
