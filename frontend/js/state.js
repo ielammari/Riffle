@@ -5,7 +5,16 @@ import { api } from "./api.js";
 const state = {
     user: null,
     counts: { cart_count: 0, second_thoughts_count: 0 },
+    deckSpec: null,
 };
+
+export function setDeckSpec(spec) {
+    state.deckSpec = spec;
+}
+
+export function getDeckSpec() {
+    return state.deckSpec;
+}
 
 const subscribers = new Set();
 
