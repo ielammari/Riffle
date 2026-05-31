@@ -8,6 +8,7 @@ import { renderAuth, setIntended } from "./auth.js";
 import { renderLanding } from "./landing.js";
 import { renderDeck } from "./deck.js";
 import { openTray } from "./secondThoughts.js";
+import { renderCart } from "./cart.js";
 
 function setBadge(node, n) {
     if (n > 0) { node.textContent = n; node.hidden = false; }
@@ -124,7 +125,7 @@ router.register("/login", (v) => {
     renderAuth(v);
 });
 router.register("/deck", guard((v, query) => renderDeck(v, query)));
-router.register("/cart", guard((v) => placeholder(v, "Cart", "Your cart lands here.", "Step 17")));
+router.register("/cart", guard((v) => renderCart(v)));
 router.setDefault((v) => placeholder(v, "Not found", "That page doesn’t exist."));
 
 document.getElementById("nav-cart").addEventListener("click", () => router.navigate("#/cart"));
