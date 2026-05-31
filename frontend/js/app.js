@@ -63,9 +63,22 @@ function accountMenu(username) {
         toast("Signed out", { type: "info" });
         router.navigate("#/");
     });
-    menu.querySelector("[data-reset]").addEventListener("click", () => {
+    menu.querySelector("[data-reset]").addEventListener("click", async () => {
         closeMenu();
-        toast("Reset Swipes arrives in Step 18", { type: "info" });
+        const ok = await confirmModal({
+            title: "Reset swipes?",
+            message: "This clears your deck history and Second Thoughts, so products you passed or held can show up again. Your cart is kept.",
+            confirmLabel: "Reset swipes",
+            cancelLabel: "Cancel",
+        });
+        if (!ok) return;
+        try {
+            applyCounts(await api.reset());
+            router.navigate("#/");
+            toast("Swipes Reset", { type: "success" });
+        } catch {
+            toast("Could not reset right now. Please try again.", { type: "error" });
+        }
     });
 
     frag.append(btn, menu);
