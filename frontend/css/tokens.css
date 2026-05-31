@@ -16,6 +16,7 @@
     --color-bg-page:#000000;
     --color-bg-surface:#111313;
     --color-bg-surface-2:#1a1d1d;
+    --color-bg-elevated:#262b2b;
     --color-bg-image-tile:#f5f7f7;
 
     /* ---- Text ---- */
@@ -62,6 +63,8 @@
 
     /* ---- Typography ---- */
     --font-body: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    --font-display: 'Syncopate', 'Segoe UI', sans-serif;
+    --font-mono: 'Space Mono', ui-monospace, 'Courier New', monospace;
     --text-xs:   0.70rem;
     --text-sm:   0.813rem;
     --text-base: 0.938rem;

@@ -1,0 +1,155 @@
+/* Toasts + confirm modal (no native dialogs). */
+
+.toast-region {
+    position: fixed;
+    left: 50%;
+    bottom: var(--space-6);
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    width: min(420px, calc(100vw - 2 * var(--space-4)));
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    color: var(--color-text-primary);
+    font-size: var(--text-base);
+    animation: toast-in var(--dur-base) var(--ease-out);
+}
+
+.toast--success { border-left-color: var(--color-success); }
+.toast--error   { border-left-color: var(--color-danger); }
+
+.toast__icon {
+    display: grid;
+    place-items: center;
+    color: var(--color-accent);
+    flex-shrink: 0;
+}
+.toast--error .toast__icon { color: var(--color-danger); }
+.toast__icon svg { width: 18px; height: 18px; }
+
+.toast__msg { flex: 1; line-height: 1.4; }
+
+.toast__close {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    background: transparent;
+    transition: color var(--transition-fast), background var(--transition-fast);
+}
+.toast__close:hover { color: var(--color-text-primary); background: var(--color-bg-surface-2); }
+
+.toast--out { animation: toast-out var(--dur-fast) var(--ease-fling) forwards; }
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toast-out {
+    to { opacity: 0; transform: translateY(8px); }
+}
+
+/* ---- Modal ---- */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+}
+
+.modal__scrim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--black) 58%, transparent);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.modal__dialog {
+    position: relative;
+    width: min(420px, 100%);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card-hover);
+    padding: var(--space-6);
+    transform: scale(0.96);
+    opacity: 0;
+    transition: transform var(--dur-base) var(--ease-spring), opacity var(--dur-base) var(--ease-out);
+}
+
+.modal--in .modal__dialog { transform: scale(1); opacity: 1; }
+.modal--out .modal__dialog { transform: scale(0.97); opacity: 0; }
+.modal--out .modal__scrim { opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); }
+
+.modal__title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-3);
+}
+
+.modal__msg {
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin-bottom: var(--space-6);
+}
+
+.modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+}
+
+.btn {
+    height: 42px;
+    padding: 0 var(--space-5);
+    border-radius: var(--radius-md);
+    font-size: var(--text-base);
+    font-weight: 600;
+    transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn--primary {
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+}
+.btn--primary:hover { background: var(--color-accent-hover); box-shadow: var(--glow-accent); }
+
+.btn--danger {
+    background: var(--color-danger);
+    color: var(--color-text-primary);
+}
+
+.btn--ghost {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+}
+.btn--ghost:hover { border-color: var(--color-border-strong); }
+
+@media (prefers-reduced-motion: reduce) {
+    .toast { animation: none; }
+    .modal__dialog { transition: opacity var(--dur-fast) linear; transform: none; }
+    .modal--in .modal__dialog { transform: none; }
+}

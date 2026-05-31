@@ -1,0 +1,198 @@
+/* Riffle app shell: header, nav, view container, transitions. */
+@import "reset.css";
+
+body {
+    min-height: 100dvh;
+    background: var(--color-bg-page);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* keyboard focus ring, on-palette */
+:focus-visible {
+    outline: none;
+    box-shadow: var(--glow-accent);
+    border-radius: var(--radius-md);
+}
+
+/* ---- Header (frosted glass over the dark canvas) ---- */
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--color-bg-surface) 72%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-header);
+}
+
+.app-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    height: 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 var(--space-5);
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--color-text-primary);
+    margin-right: auto;
+}
+
+.brand__mark {
+    width: 26px;
+    height: 26px;
+    color: var(--color-accent);
+    filter: drop-shadow(0 0 6px var(--color-accent-soft));
+}
+
+.brand__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.16em;
+}
+
+.app-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.iconbtn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    background: transparent;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.iconbtn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.iconbtn:hover {
+    background: var(--color-bg-elevated);
+    color: var(--color-text-primary);
+}
+
+.badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: grid;
+    place-items: center;
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0 0 2px var(--color-bg-page);
+}
+
+.badge[hidden] {
+    display: none;
+}
+
+/* ---- Account area ---- */
+.account__login,
+.account__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 38px;
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.account__login:hover,
+.account__btn:hover {
+    border-color: var(--color-border-accent);
+}
+
+/* ---- View container ---- */
+.app-view {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-5) var(--space-8);
+    outline: none;
+}
+
+.view-enter {
+    animation: view-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes view-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Placeholder views (replaced in later steps) ---- */
+.placeholder {
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--space-3);
+    padding: var(--space-8) var(--space-4);
+}
+
+.placeholder__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    color: var(--color-text-primary);
+}
+
+.placeholder__sub {
+    color: var(--color-text-secondary);
+    font-size: var(--text-lg);
+    max-width: 46ch;
+}
+
+.placeholder__chip {
+    margin-top: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+}
+
+@media (max-width: 600px) {
+    .app-header__inner { padding: 0 var(--space-4); gap: var(--space-2); }
+    .brand__name { font-size: 0.95rem; letter-spacing: 0.12em; }
+    .app-view { padding: var(--space-5) var(--space-4) var(--space-7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .view-enter { animation: none; }
+    * { scroll-behavior: auto; }
+}
