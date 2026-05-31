@@ -37,15 +37,15 @@
     --color-border-strong:var(--gray-600);
     --color-border-accent:var(--cyan-700);
 
-    /* ---- Swipe-direction cues (on-palette) ---- */
-    --swipe-right:var(--cyan-500); --swipe-right-soft:rgba(0,255,243,.18);
+    /* ---- Swipe-direction cues (follow the accent) ---- */
+    --swipe-right:var(--color-accent); --swipe-right-soft:var(--color-accent-soft);
     --swipe-down:var(--cyan-300);  --swipe-down-soft:rgba(77,255,246,.14);
     --swipe-left:var(--gray-400);  --swipe-left-soft:rgba(111,119,119,.20);
 
     /* ---- Status (functional only) + discount ---- */
-    --color-success:var(--cyan-500);
+    --color-success:var(--color-accent);
     --color-danger:#ff5d6c;
-    --color-discount:var(--cyan-500);
+    --color-discount:var(--color-accent);
 
     /* ---- Swipe action controls (buttons): traffic-light semantics ---- */
     --color-accept:#2ecf75;  --color-accept-soft:rgba(46,207,117,.16);

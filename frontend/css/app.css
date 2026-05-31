@@ -206,3 +206,13 @@ input:-webkit-autofill:focus {
     .view-enter { animation: none; }
     * { scroll-behavior: auto; }
 }
+
+/* User setting: force motion off app-wide from Settings > Appearance > Motion. */
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}

@@ -71,7 +71,7 @@ export function makeSwipeable(card, onDecision) {
     }
 
     function onDown(e) {
-        if (decided || e.target.closest(".card__nav")) return;
+        if (decided || e.target.closest(".card__nav, .card__info")) return;
         dragging = true;
         startX = e.clientX; startY = e.clientY; dx = 0; dy = 0;
         t0 = performance.now();

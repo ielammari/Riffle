@@ -48,4 +48,7 @@ export const api = {
     release: (productId) => request("DELETE", `/second-thoughts/${productId}`),
 
     reset: () => request("POST", "/reset"),
+
+    settings: () => request("GET", "/settings"),
+    settingsUpdate: (body) => request("PUT", "/settings", body),
 };

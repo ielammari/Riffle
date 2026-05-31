@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="css/deck.css" />
     <link rel="stylesheet" href="css/tray.css" />
     <link rel="stylesheet" href="css/cart.css" />
+    <link rel="stylesheet" href="css/detail.css" />
+    <link rel="stylesheet" href="css/settings.css" />
+    <link rel="stylesheet" href="css/footer.css" />
 </head>
 <body>
     <noscript><p style="padding:24px;text-align:center;color:#f4f6f6">Riffle needs JavaScript enabled to run.</p></noscript>
@@ -52,6 +55,56 @@
     </header>
 
     <main class="app-view" id="app-view" tabindex="-1"></main>
+
+    <footer class="site-footer">
+        <div class="site-footer__inner">
+            <div class="site-footer__brand">
+                <a class="brand" href="#/" aria-label="Riffle home">
+                    <svg class="brand__mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="6" width="13" height="15" rx="2" />
+                        <path d="M8 6V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2h-1" />
+                    </svg>
+                    <span class="brand__name">RIFFLE</span>
+                </a>
+                <p class="site-footer__tag">Swipe to decide. One product at a time, seen once, best first.</p>
+                <p class="site-footer__credit">A demo storefront built with Flask and vanilla JavaScript. Live product data from DummyJSON.</p>
+            </div>
+            <nav class="site-footer__cols" aria-label="Footer">
+                <div class="site-footer__col">
+                    <h3>Explore</h3>
+                    <a href="#/">Home</a>
+                    <a href="#/deck">Your deck</a>
+                    <a href="#/cart">Cart</a>
+                </div>
+                <div class="site-footer__col">
+                    <h3>Account</h3>
+                    <a href="#/login">Log in</a>
+                    <a href="#/settings">Settings</a>
+                </div>
+                <div class="site-footer__col">
+                    <h3>Connect</h3>
+                    <div class="site-footer__social">
+                        <button type="button" data-social="github" aria-label="GitHub">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.09 2.94.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/></svg>
+                        </button>
+                        <button type="button" data-social="x" aria-label="X">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.5 8.6L23 22h-6.8l-5-6.6L5.4 22H2.3l8-9.2L1.6 2h6.9l4.6 6.1L18.9 2Zm-1.2 18h1.9L7.1 4H5.1l12.6 16Z"/></svg>
+                        </button>
+                        <button type="button" data-social="instagram" aria-label="Instagram">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+                        </button>
+                        <button type="button" data-social="linkedin" aria-label="LinkedIn">
+                            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.3c0-1.27-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21h-4z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="site-footer__bar">
+            <span>© 2026 Riffle</span>
+            <span>Built with Flask + vanilla JS</span>
+        </div>
+    </footer>
 
     <div class="toast-region" id="toast-region" role="region" aria-live="polite" aria-label="Notifications"></div>
     <div class="modal-root" id="modal-root"></div>

@@ -3,6 +3,7 @@
 import { api } from "./api.js";
 import { toast } from "./toast.js";
 import { applyCounts } from "./state.js";
+import { openDetail } from "./detail.js";
 
 const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
 const MINUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>';
@@ -71,8 +72,9 @@ export async function renderCart(view) {
         li.className = "cart-item";
         li.dataset.id = it.id;
         li.innerHTML =
-            `<div class="cart-item__media"><img src="${esc((it.images && it.images[0]) || "")}" alt="" /></div>` +
-            '<div class="cart-item__info"><p class="cart-item__title"></p><p class="cart-item__unit"></p></div>' +
+            `<button type="button" class="cart-item__open" aria-label="View details for ${esc(it.title || "product")}">` +
+            `<span class="cart-item__media"><img src="${esc((it.images && it.images[0]) || "")}" alt="" /></span>` +
+            '<span class="cart-item__info"><span class="cart-item__title"></span><span class="cart-item__unit"></span></span></button>' +
             '<div class="cart-item__controls">' +
             `<div class="cart-item__qty"><button type="button" class="qty-btn" data-act="dec" aria-label="Decrease quantity">${MINUS}</button>` +
             `<span class="qty-val">${it.qty}</span>` +
@@ -84,6 +86,7 @@ export async function renderCart(view) {
         li.querySelector(".cart-item__line").textContent = `${it.currency}${fmt(it.line_total)}`;
         li.querySelector('[data-act="dec"]').disabled = it.qty <= 1;
 
+        li.querySelector(".cart-item__open").addEventListener("click", () => openDetail(it));
         li.querySelector('[data-act="inc"]').addEventListener("click", () => changeQty(it.id, li, +1));
         li.querySelector('[data-act="dec"]').addEventListener("click", () => changeQty(it.id, li, -1));
         li.querySelector(".cart-item__remove").addEventListener("click", () => removeItem(it.id, li));

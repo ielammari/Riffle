@@ -43,3 +43,13 @@ input {
     font-family: inherit;
     font-size: inherit;
 }
+
+* {
+    scrollbar-width: none;       /* Firefox */
+    -ms-overflow-style: none;    /* Edge/IE */
+}
+*::-webkit-scrollbar {           /* Chrome, Safari */
+    width: 0;
+    height: 0;
+    display: none;
+}

@@ -3,8 +3,8 @@
 from datetime import timedelta
 from flask import Blueprint, jsonify, request
 
+from backend import settings as settings_store
 from backend.auth import current_user, login_required
-from backend.config import Config
 from backend.counts import user_counts
 from backend.extensions import db
 from backend.models import CartItem, Decision, SecondThought, utcnow
@@ -24,11 +24,12 @@ def _add_to_cart(user_id, product_id):
 
 def _add_second_thought(user_id, product_id):
     now = utcnow()
+    ttl = settings_store.get_settings(user_id)["st_seconds"]
     db.session.add(SecondThought(
         user_id=user_id,
         product_id=product_id,
         started_at=now,
-        expires_at=now + timedelta(seconds=Config.SECOND_THOUGHTS_TTL_SECONDS),
+        expires_at=now + timedelta(seconds=ttl),
         status="active",
     ))
 

@@ -75,6 +75,25 @@
 .card__nav--prev { left: var(--space-3); }
 .card__nav--next { right: var(--space-3); }
 
+.card__info {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    z-index: 5;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: var(--gray-900);
+    background: color-mix(in srgb, var(--gray-0) 80%, transparent);
+    border: 1px solid var(--gray-200);
+    backdrop-filter: blur(4px);
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.card__info svg { width: 18px; height: 18px; }
+.card__info:hover { background: var(--gray-0); transform: scale(1.06); }
+
 .card__counter {
     position: absolute;
     bottom: var(--space-3);
@@ -153,6 +172,17 @@
 .card__cue.is-right { right: var(--space-5); color: var(--color-accept); transform: rotate(-12deg); }
 .card__cue.is-left { left: var(--space-5); color: var(--color-reject); transform: rotate(12deg); }
 .card__cue.is-down { left: 50%; top: auto; bottom: var(--space-7); transform: translateX(-50%); color: var(--color-hold); }
+
+/* Phone: image on top, then the data (title, rating, price, stock) always
+   visible, then the description fills the rest.*/
+@media (max-width: 819px) {
+    .card__media { flex: 0 0 44%; }
+    .card__body { overflow: hidden; }
+    .card__head,
+    .card__meta { flex: 0 0 auto; }
+    .card__desc { flex: 1 1 auto; min-height: 0; -webkit-line-clamp: 4; }
+    .card__specs { display: none; }
+}
 
 /* PC: image beside the details (the stack box sets the square-ish size). */
 @media (min-width: 820px) {

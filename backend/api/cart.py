@@ -3,9 +3,8 @@
 import requests
 from flask import Blueprint, jsonify, request
 
-from backend import cards, dummyjson
+from backend import cards, dummyjson, settings as settings_store
 from backend.auth import current_user, login_required
-from backend.config import Config
 from backend.extensions import db
 from backend.models import CartItem
 
@@ -13,19 +12,20 @@ bp = Blueprint("cart", __name__, url_prefix="/api")
 
 
 def _cart_payload(user_id):
+    currency = settings_store.get_settings(user_id)["currency"]
     rows = CartItem.query.filter_by(user_id=user_id).order_by(CartItem.added_at).all()
     items, subtotal, count = [], 0.0, 0
     for row in rows:
         product = dummyjson.get_product(row.product_id)
         if product is None:
             continue
-        card = cards.build_card(product)
+        card = cards.build_card(product, currency=currency)
         card["qty"] = row.qty
         card["line_total"] = round((card["price"] or 0) * row.qty, 2)
         items.append(card)
         subtotal += card["line_total"]
         count += row.qty
-    return {"items": items, "subtotal": round(subtotal, 2), "currency": Config.CURRENCY, "count": count}
+    return {"items": items, "subtotal": round(subtotal, 2), "currency": currency, "count": count}
 
 
 @bp.get("/cart")
