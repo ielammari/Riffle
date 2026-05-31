@@ -43,6 +43,16 @@ def get_categories():
     ]
 
 
+_valid_slugs = None
+
+
+def valid_category_slugs():
+    global _valid_slugs
+    if _valid_slugs is None:
+        _valid_slugs = {c["slug"] for c in get_categories()}
+    return _valid_slugs
+
+
 def get_by_category(slug, limit=30, skip=0):
     data = _get(f"/products/category/{slug}", {"limit": limit, "skip": skip})
     _cache(data.get("products", []))
