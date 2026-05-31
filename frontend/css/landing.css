@@ -74,6 +74,11 @@
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 .hero__input::placeholder { color: var(--color-text-muted); }
+.hero__input:-webkit-autofill,
+.hero__input:-webkit-autofill:hover,
+.hero__input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--color-bg-surface) inset;
+}
 .hero__input:focus {
     outline: none;
     border-color: var(--color-border-accent);

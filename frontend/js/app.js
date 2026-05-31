@@ -6,6 +6,7 @@ import { toast, confirmModal } from "./toast.js";
 import { getState, subscribe, setUser, applyCounts } from "./state.js";
 import { renderAuth, setIntended } from "./auth.js";
 import { renderLanding } from "./landing.js";
+import { renderDeck } from "./deck.js";
 
 function setBadge(node, n) {
     if (n > 0) { node.textContent = n; node.hidden = false; }
@@ -121,14 +122,7 @@ router.register("/login", (v) => {
     if (getState().user) { router.navigate("#/"); return; }
     renderAuth(v);
 });
-router.register("/deck", guard((v, query) => {
-    const target = query.q
-        ? `query: “${query.q}”`
-        : query.category
-            ? `category: ${query.category}`
-            : "your ranked deck";
-    placeholder(v, "Deck", `Launching ${target}.`, "Step 15");
-}));
+router.register("/deck", guard((v, query) => renderDeck(v, query)));
 router.register("/cart", guard((v) => placeholder(v, "Cart", "Your cart lands here.", "Step 17")));
 router.setDefault((v) => placeholder(v, "Not found", "That page doesn’t exist."));
 

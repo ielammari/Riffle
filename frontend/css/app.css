@@ -15,6 +15,16 @@ body {
     border-radius: var(--radius-md);
 }
 
+/* Keep autofilled inputs on the dark surface (browser forces white otherwise). */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-text-primary);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-bg-surface-2) inset;
+    caret-color: var(--color-text-primary);
+    transition: background-color 9999s ease-in-out 0s;
+}
+
 /* ---- Header (frosted glass over the dark canvas) ---- */
 .app-header {
     position: sticky;
