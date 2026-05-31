@@ -75,7 +75,7 @@ export function makeSwipeable(card, onDecision) {
         dragging = true;
         startX = e.clientX; startY = e.clientY; dx = 0; dy = 0;
         t0 = performance.now();
-        card.style.transition = "";
+        card.style.transition = "none";
         card.classList.add("is-grabbing");
         try { card.setPointerCapture(e.pointerId); } catch { /* noop */ }
     }

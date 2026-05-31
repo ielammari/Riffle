@@ -31,7 +31,9 @@
     grid-area: card;
     position: relative;
     width: min(460px, 94vw);
+    height: min(78vh, 700px);
     display: flex;
+    align-items: center;
     justify-content: center;
 }
 
@@ -93,8 +95,8 @@
 
 /* ---- States ---- */
 .deck__skeleton {
-    width: min(460px, 94vw);
-    height: min(78vh, 700px);
+    width: 100%;
+    height: 100%;
     border-radius: var(--radius-lg);
     background: linear-gradient(100deg, var(--color-bg-surface) 30%, var(--color-bg-surface-2) 50%, var(--color-bg-surface) 70%);
     background-size: 200% 100%;
@@ -125,7 +127,7 @@
 }
 
 @media (min-width: 820px) {
-    .deck__skeleton { height: min(70vh, 600px); width: min(900px, 80vw); }
+    .deck__stack { width: min(900px, 80vw); height: min(70vh, 600px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
