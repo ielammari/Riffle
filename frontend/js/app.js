@@ -7,6 +7,7 @@ import { getState, subscribe, setUser, applyCounts } from "./state.js";
 import { renderAuth, setIntended } from "./auth.js";
 import { renderLanding } from "./landing.js";
 import { renderDeck } from "./deck.js";
+import { openTray } from "./secondThoughts.js";
 
 function setBadge(node, n) {
     if (n > 0) { node.textContent = n; node.hidden = false; }
@@ -127,9 +128,10 @@ router.register("/cart", guard((v) => placeholder(v, "Cart", "Your cart lands he
 router.setDefault((v) => placeholder(v, "Not found", "That page doesn’t exist."));
 
 document.getElementById("nav-cart").addEventListener("click", () => router.navigate("#/cart"));
-document.getElementById("nav-tray").addEventListener("click", () =>
-    toast("Second Thoughts drawer coming soon", { type: "info" })
-);
+document.getElementById("nav-tray").addEventListener("click", () => {
+    if (getState().user) openTray();
+    else router.navigate("#/login");
+});
 
 window.riffle = { api, toast, confirmModal, state: getState() };
 
