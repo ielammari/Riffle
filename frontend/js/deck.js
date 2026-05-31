@@ -71,7 +71,7 @@ export async function renderDeck(view, query) {
     let exhausted = false;
 
     try {
-        const data = await api.deck({ q: query.q, category: query.category, limit: 12 });
+        const data = await api.deck({ q: query.q, category: query.category });
         items = (data && data.items) || [];
     } catch {
         stack.innerHTML = "";
@@ -161,7 +161,7 @@ export async function renderDeck(view, query) {
         if (exhausted || refilling || items.length - i > REFILL_AT) return;
         refilling = true;
         try {
-            const data = await api.deck({ q: query.q, category: query.category, limit: 12 });
+            const data = await api.deck({ q: query.q, category: query.category });
             const have = new Set(items.map((x) => x.id));
             const fresh = ((data && data.items) || []).filter((x) => !have.has(x.id));
             if (!fresh.length) exhausted = true;

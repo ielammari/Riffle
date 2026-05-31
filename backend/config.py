@@ -21,9 +21,10 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
 
     CURRENCY = "$"
-    DECK_LIMIT_DEFAULT = 12
-    DECK_LIMIT_MAX = 30
-    DECK_CANDIDATE_LIMIT = 100
+    DECK_LIMIT_MIN = 10
+    DECK_LIMIT_DEFAULT = 30
+    DECK_LIMIT_MAX = 50
+    DECK_CANDIDATE_LIMIT = 150
 
     RANKING_WEIGHTS = {"rating": 0.55, "review": 0.15, "stock": 0.10, "discount": 0.10, "query": 0.10}
     RANKING_RATING_BIAS = 0.15
@@ -31,3 +32,27 @@ class Config:
     RANKING_PRICE_BIAS = 0.10
 
     SECOND_THOUGHTS_TTL_SECONDS = int(os.environ.get("RIFFLE_ST_TTL", "300"))
+
+    # ---- User-editable settings (see backend/settings.py) ----
+    ST_TTL_MIN = 15
+    ST_TTL_MAX = 900
+
+    # Ranking presets the Settings page can pick from (overlay the deck spec biases).
+    RANKING_PRESETS = {
+        "balanced": {},
+        "top_rated": {"rating": 1.0, "min_rating": 4.0},
+        "best_deals": {"discount": 1.0},
+        "low_price": {"price": "asc", "discount": 0.5},
+    }
+
+    CURRENCY_OPTIONS = ["$", "€", "£", "¥", "DH", "kr"]
+    ACCENT_OPTIONS = ["cyan", "violet", "magenta", "lime"]
+
+    SETTINGS_DEFAULTS = {
+        "deck_limit": DECK_LIMIT_DEFAULT,
+        "st_seconds": SECOND_THOUGHTS_TTL_SECONDS,
+        "ranking": "balanced",
+        "currency": CURRENCY,
+        "accent": "cyan",
+        "motion": "on",
+    }

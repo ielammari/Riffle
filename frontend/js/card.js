@@ -1,8 +1,11 @@
 // Renders a full product card (steppable image carousel on a light tile + details).
 
+import { openDetail } from "./detail.js";
+
 const ARROW_L = "M15 18l-6-6 6-6";
 const ARROW_R = "M9 6l6 6-6 6";
 const STAR = "M12 2.5l2.9 5.9 6.5.95-4.7 4.58 1.1 6.47L12 17.9 6.2 20.9l1.1-6.47L2.6 9.85l6.5-.95z";
+const INFO = "M12 16v-5M12 7.5h.01";
 
 function esc(s) {
     return String(s).replace(/[&<>"']/g, (ch) =>
@@ -85,6 +88,14 @@ export function createCard(c) {
         badge.textContent = `-${Math.round(c.discount_percentage)}%`;
         media.appendChild(badge);
     }
+
+    const info = document.createElement("button");
+    info.type = "button";
+    info.className = "card__info";
+    info.setAttribute("aria-label", "View full details");
+    info.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="${INFO}"/></svg>`;
+    info.addEventListener("click", () => openDetail(c));
+    media.appendChild(info);
 
     if (images.length > 1) {
         const prev = navBtn("prev", "Previous image", ARROW_L);

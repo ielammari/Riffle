@@ -3,7 +3,7 @@
 import requests
 from flask import Blueprint, jsonify, request
 
-from backend import cards, dummyjson, query_parser, ranking
+from backend import cards, dummyjson, query_parser, ranking, settings as settings_store
 from backend.auth import current_user, login_required
 from backend.config import Config
 from backend.models import CartItem, Decision, SecondThought
@@ -72,12 +72,13 @@ def _excluded_ids(user_id):
     return dec | cart | tray
 
 
-def build_deck(user_id, q=None, category=None, limit=12):
+def build_deck(user_id, q=None, category=None, limit=12, ranking_preset="balanced", currency=None):
     products, spec = _resolve_candidates(q, category)
+    settings_store.apply_ranking_preset(spec, ranking_preset)
     excluded = _excluded_ids(user_id)
     pool = [p for p in products if p.get("id") not in excluded and _passes(p, spec)]
     ranked = ranking.rank(pool, spec)
-    return [cards.build_card(p) for p in ranked[:limit]]
+    return [cards.build_card(p, currency=currency) for p in ranked[:limit]]
 
 
 @bp.get("/deck")
@@ -86,14 +87,21 @@ def deck():
     user = current_user()
     q = request.args.get("q")
     category = request.args.get("category")
-    try:
-        limit = int(request.args.get("limit", Config.DECK_LIMIT_DEFAULT))
-    except (TypeError, ValueError):
-        limit = Config.DECK_LIMIT_DEFAULT
-    limit = max(1, min(limit, Config.DECK_LIMIT_MAX))
+    prefs = settings_store.get_settings(user.id)
+
+    raw_limit = request.args.get("limit")
+    if raw_limit is None:
+        limit = prefs["deck_limit"]
+    else:
+        try:
+            limit = int(raw_limit)
+        except (TypeError, ValueError):
+            limit = prefs["deck_limit"]
+    limit = max(Config.DECK_LIMIT_MIN, min(limit, Config.DECK_LIMIT_MAX))
 
     try:
-        items = build_deck(user.id, q=q, category=category, limit=limit)
+        items = build_deck(user.id, q=q, category=category, limit=limit,
+                           ranking_preset=prefs["ranking"], currency=prefs["currency"])
     except requests.RequestException:
         return jsonify(error="upstream_unavailable"), 502
     return jsonify({"items": items, "count": len(items)})

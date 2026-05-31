@@ -10,6 +10,7 @@ def register_api(app):
     from .products import bp as products_bp
     from .reset import bp as reset_bp
     from .second_thoughts import bp as second_thoughts_bp
+    from .settings import bp as settings_bp
     from .swipe import bp as swipe_bp
 
     app.register_blueprint(auth_bp)
@@ -20,4 +21,5 @@ def register_api(app):
     app.register_blueprint(products_bp)
     app.register_blueprint(reset_bp)
     app.register_blueprint(second_thoughts_bp)
+    app.register_blueprint(settings_bp)
     app.register_blueprint(swipe_bp)

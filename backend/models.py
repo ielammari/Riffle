@@ -70,3 +70,12 @@ class ProductCache(db.Model):
     product_id = db.Column(db.Integer, primary_key=True)  # DummyJSON product id
     data = db.Column(db.JSON, nullable=False)
     fetched_at = db.Column(db.DateTime, default=utcnow, nullable=False)
+
+
+class UserSettings(db.Model):
+    # Per-user preferences (limits, ranking, currency, appearance). Defaults in config.
+    __tablename__ = "user_settings"
+
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+    data = db.Column(db.JSON, nullable=False, default=dict)
+    updated_at = db.Column(db.DateTime, default=utcnow, onupdate=utcnow, nullable=False)

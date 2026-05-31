@@ -3,6 +3,7 @@
 import { api } from "./api.js";
 import { toast } from "./toast.js";
 import { applyCounts } from "./state.js";
+import { openDetail } from "./detail.js";
 
 const RADIUS = 20;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -33,13 +34,15 @@ function makeRow(item) {
         `<circle class="tray-ring__bg" cx="24" cy="24" r="${RADIUS}"/>` +
         `<circle class="tray-ring__fg" cx="24" cy="24" r="${RADIUS}" stroke-dasharray="${CIRC}" stroke-dashoffset="0" transform="rotate(-90 24 24)"/>` +
         '</svg><span class="tray-ring__secs">--</span></div>' +
-        `<div class="tray-item__media"><img src="${esc((item.images && item.images[0]) || "")}" alt="" /></div>` +
-        '<div class="tray-item__info"><p class="tray-item__title"></p><p class="tray-item__price"></p></div>' +
+        `<button type="button" class="tray-item__open" aria-label="View details for ${esc(item.title || "product")}">` +
+        `<span class="tray-item__media"><img src="${esc((item.images && item.images[0]) || "")}" alt="" /></span>` +
+        '<span class="tray-item__info"><span class="tray-item__title"></span><span class="tray-item__price"></span></span></button>' +
         '<div class="tray-item__actions">' +
         `<button type="button" class="tray-act tray-act--promote" aria-label="Promote to cart">${CART_ICON}</button>` +
         `<button type="button" class="tray-act tray-act--release" aria-label="Let go">${X_ICON}</button></div>`;
     li.querySelector(".tray-item__title").textContent = item.title || "";
     li.querySelector(".tray-item__price").textContent = money(item);
+    li.querySelector(".tray-item__open").addEventListener("click", () => openDetail(item));
     return {
         el: li,
         item,

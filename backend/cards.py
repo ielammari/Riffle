@@ -29,7 +29,7 @@ def build_specs(p):
     return specs
 
 
-def build_card(p):
+def build_card(p, currency=None):
     price = p.get("price") or 0
     discount = p.get("discountPercentage") or 0
     images = p.get("images") or []
@@ -42,7 +42,7 @@ def build_card(p):
         "price": price,
         "original_price": _original_price(price, discount),
         "discount_percentage": discount,
-        "currency": Config.CURRENCY,
+        "currency": currency or Config.CURRENCY,
         "rating": p.get("rating"),
         "review_count": len(p.get("reviews") or []),
         "stock": p.get("stock"),

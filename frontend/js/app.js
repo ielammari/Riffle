@@ -3,12 +3,16 @@
 import { api } from "./api.js";
 import * as router from "./router.js";
 import { toast, confirmModal } from "./toast.js";
-import { getState, subscribe, setUser, applyCounts } from "./state.js";
+import { getState, subscribe, setUser, applyCounts, setSettings } from "./state.js";
 import { renderAuth, setIntended } from "./auth.js";
 import { renderLanding } from "./landing.js";
 import { renderDeck } from "./deck.js";
 import { openTray } from "./secondThoughts.js";
 import { renderCart } from "./cart.js";
+import { renderSettings } from "./settings.js";
+import { applyAppearance, applyStoredAppearance, clearStoredAppearance } from "./appearance.js";
+
+applyStoredAppearance();
 
 function setBadge(node, n) {
     if (n > 0) { node.textContent = n; node.hidden = false; }
@@ -30,6 +34,7 @@ function accountMenu(username) {
     menu.setAttribute("role", "menu");
     menu.innerHTML =
         '<div class="account__menu-head">Signed in as <strong></strong></div>' +
+        '<button type="button" class="account__item" role="menuitem" data-settings>Settings</button>' +
         '<button type="button" class="account__item" role="menuitem" data-reset>Reset Swipes</button>' +
         '<button type="button" class="account__item account__item--danger" role="menuitem" data-logout>Logout</button>';
     menu.querySelector("strong").textContent = username;
@@ -55,10 +60,16 @@ function accountMenu(username) {
         menu.hidden ? openMenu() : closeMenu();
     });
 
+    menu.querySelector("[data-settings]").addEventListener("click", () => {
+        closeMenu();
+        router.navigate("#/settings");
+    });
     menu.querySelector("[data-logout]").addEventListener("click", async () => {
         closeMenu();
         try { await api.logout(); } catch { /* ignore */ }
         setUser(null);
+        setSettings(null);
+        clearStoredAppearance();
         applyCounts({ cart_count: 0, second_thoughts_count: 0 });
         toast("Signed out", { type: "info" });
         router.navigate("#/");
@@ -139,6 +150,7 @@ router.register("/login", (v) => {
 });
 router.register("/deck", guard((v, query) => renderDeck(v, query)));
 router.register("/cart", guard((v) => renderCart(v)));
+router.register("/settings", guard((v) => renderSettings(v)));
 router.setDefault((v) => placeholder(v, "Not found", "That page doesn’t exist."));
 
 document.getElementById("nav-cart").addEventListener("click", () => router.navigate("#/cart"));
@@ -149,11 +161,19 @@ document.getElementById("nav-tray").addEventListener("click", () => {
 
 window.riffle = { api, toast, confirmModal, state: getState() };
 
+document.addEventListener("click", (e) => {
+    const s = e.target.closest("[data-social]");
+    if (s) toast("Social links are placeholders in this demo.", { type: "info" });
+});
+
 subscribe(renderHeader);
 renderHeader(getState());
 
 (async () => {
     try { setUser(await api.me()); } catch { setUser(null); }
     router.start();
-    if (getState().user) api.secondThoughts().then(applyCounts).catch(() => {});
+    if (getState().user) {
+        api.secondThoughts().then(applyCounts).catch(() => {});
+        api.settings().then((d) => { setSettings(d.settings); applyAppearance(d.settings); }).catch(() => {});
+    }
 })();

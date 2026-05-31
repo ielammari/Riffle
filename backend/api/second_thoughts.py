@@ -4,9 +4,8 @@ from datetime import datetime, timezone
 import requests
 from flask import Blueprint, jsonify
 
-from backend import cards, dummyjson
+from backend import cards, dummyjson, settings as settings_store
 from backend.auth import current_user, login_required
-from backend.config import Config
 from backend.counts import user_counts
 from backend.extensions import db
 from backend.models import CartItem, SecondThought
@@ -67,13 +66,14 @@ def list_tray():
     if changed:
         db.session.commit()
 
+    prefs = settings_store.get_settings(user.id)
     try:
         items = []
         for r in active:
             product = dummyjson.get_product(r.product_id)
             if product is None:
                 continue
-            card = cards.build_card(product)
+            card = cards.build_card(product, currency=prefs["currency"])
             card["status"] = r.status
             card["started_at"] = _iso(r.started_at)
             card["expires_at"] = _iso(r.expires_at)
@@ -83,7 +83,7 @@ def list_tray():
 
     return jsonify({
         "server_now": _iso(now),
-        "ttl": Config.SECOND_THOUGHTS_TTL_SECONDS,
+        "ttl": prefs["st_seconds"],
         "items": items,
         **user_counts(user.id),
     })
