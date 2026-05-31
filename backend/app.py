@@ -15,7 +15,7 @@ FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
 def create_app():
     # static_url_path="" serves every file under frontend/ at the site root,
-    # so /css/style.css, /js/script.js, etc. resolve directly. "/" is handled below.
+    # so /css/app.css, /js/app.js, etc. resolve directly. "/" is handled below.
     app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
     app.config.from_object(Config)
 
