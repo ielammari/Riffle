@@ -1,10 +1,12 @@
-/* Product card: large surface, light image tile + carousel, full details, swipe cues. */
+/* Product card: fills the deck stack box; rear cards give depth; swipe cues. */
 
 .card {
-    position: relative;
-    width: min(460px, 94vw);
-    height: min(78vh, 700px);
-    margin: 0 auto;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    z-index: 3;
     display: flex;
     flex-direction: column;
     background: var(--color-bg-surface);
@@ -16,11 +18,17 @@
     user-select: none;
     -webkit-user-select: none;
     cursor: grab;
+    transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
     animation: card-in 200ms var(--ease-out);
 }
 .card.is-grabbing { cursor: grabbing; }
 
 @keyframes card-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Rear cards in the stack (non-interactive, scaled, dimmed, translated up). */
+.card--rear { pointer-events: none; box-shadow: none; }
+.card--pos-1 { transform: translateY(-12px) scale(0.95); opacity: 0.9; z-index: 2; }
+.card--pos-2 { transform: translateY(-24px) scale(0.90); opacity: 0.7; z-index: 1; }
 
 .card__media {
     position: relative;
@@ -32,13 +40,7 @@
     overflow: hidden;
 }
 
-.card__img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    padding: var(--space-5);
-    pointer-events: none;
-}
+.card__img { width: 100%; height: 100%; object-fit: contain; padding: var(--space-5); pointer-events: none; }
 
 .card__discount {
     position: absolute;
@@ -99,12 +101,7 @@
 }
 .card__body::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
-.card__head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-3);
-}
+.card__head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); }
 .card__title { font-size: var(--text-lg); font-weight: 700; line-height: 1.3; color: var(--color-text-primary); }
 
 .card__rating { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; }
@@ -138,7 +135,7 @@
 .card__specs dd { color: var(--color-text-secondary); font-size: var(--text-sm); text-align: right; }
 
 /* ---- Swipe direction cues (stamp overlays, action colors) ---- */
-.card__cues { position: absolute; inset: 0; pointer-events: none; }
+.card__cues { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
 .card__cue {
     position: absolute;
     top: var(--space-6);
@@ -157,17 +154,13 @@
 .card__cue.is-left { left: var(--space-5); color: var(--color-reject); transform: rotate(12deg); }
 .card__cue.is-down { left: 50%; top: auto; bottom: var(--space-7); transform: translateX(-50%); color: var(--color-hold); }
 
-/* PC: a chunkier, more square card with image beside the details. */
+/* PC: image beside the details (the stack box sets the square-ish size). */
 @media (min-width: 820px) {
-    .card {
-        flex-direction: row;
-        width: min(900px, 80vw);
-        height: min(70vh, 600px);
-    }
+    .card { flex-direction: row; }
     .card__media { flex: 0 0 46%; }
     .card__body { width: 54%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .card { animation: none; }
+    .card { animation: none; transition: none; }
 }

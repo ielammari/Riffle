@@ -1,4 +1,4 @@
-// Deck view: fetch the deck and drive it by swipe (phones) or side controls (desktop).
+// Deck view: buffered card stack (top + 2 rear), swipe/controls/keyboard, refill on low.
 
 import { api } from "./api.js";
 import { createCard } from "./card.js";
@@ -13,6 +13,8 @@ const ICONS = {
 };
 const DIRECTION = { pass: "left", hold: "down", cart: "right" };
 const KEYS = { ArrowLeft: "left", ArrowRight: "right", ArrowDown: "down" };
+const WINDOW = 3;
+const REFILL_AT = 3;
 
 function esc(s) {
     return String(s).replace(/[&<>"']/g, (ch) =>
@@ -64,7 +66,9 @@ export async function renderDeck(view, query) {
 
     let items = [];
     let i = 0;
-    let controller = null;
+    let slots = []; // index 0 = top card; objects { el, item, controller }
+    let refilling = false;
+    let exhausted = false;
 
     try {
         const data = await api.deck({ q: query.q, category: query.category, limit: 12 });
@@ -77,45 +81,110 @@ export async function renderDeck(view, query) {
         return;
     }
 
-    function show() {
+    function newCard(item, pos) {
+        const el = createCard(item);
+        let controller = null;
+        if (pos === 0) {
+            controller = makeSwipeable(el, onDecision);
+        } else {
+            el.classList.add("card--rear", `card--pos-${pos}`);
+            el.inert = true;
+        }
+        stack.appendChild(el);
+        return { el, item, controller };
+    }
+
+    function renderEnd() {
+        slots = [];
         stack.innerHTML = "";
-        if (i >= items.length) {
-            controller = null;
-            setEnabled(false);
+        setEnabled(false);
+        if (refilling) {
+            const sk = document.createElement("div");
+            sk.className = "deck__skeleton";
+            stack.appendChild(sk);
+        } else {
             stack.appendChild(stateBox("That is the whole deck",
                 "You have seen everything here. Try another search or category.",
                 "Browse", () => { location.hash = "#/"; }));
-            return;
         }
-        const card = createCard(items[i]);
-        stack.appendChild(card);
-        controller = makeSwipeable(card, onDecision);
+    }
+
+    function backfill() {
+        while (slots.length < WINDOW && i + slots.length < items.length) {
+            slots.push(newCard(items[i + slots.length], slots.length));
+        }
+    }
+
+    function mount() {
+        stack.innerHTML = "";
+        slots = [];
+        if (i >= items.length) { renderEnd(); return; }
+        const n = Math.min(WINDOW, items.length - i);
+        for (let p = n - 1; p >= 0; p--) slots[p] = newCard(items[i + p], p);
         setEnabled(true);
     }
 
+    function promote() {
+        const flung = slots.shift();
+        if (flung && flung.el) flung.el.remove();
+        slots.forEach((slot, idx) => {
+            slot.el.classList.remove("card--rear", "card--pos-1", "card--pos-2");
+            if (idx === 0) {
+                slot.el.inert = false;
+                if (!slot.controller) slot.controller = makeSwipeable(slot.el, onDecision);
+            } else {
+                slot.el.classList.add("card--rear", `card--pos-${idx}`);
+            }
+        });
+        if (slots.length === 0 && i < items.length) slots[0] = newCard(items[i], 0);
+        backfill();
+        if (slots.length === 0) renderEnd();
+        else setEnabled(true);
+    }
+
     async function onDecision(dir) {
-        const card = items[i];
-        if (!card) return;
+        const top = slots[0];
+        if (!top) return;
         setEnabled(false);
         try {
-            applyCounts(await api.swipe(card.id, dir));
+            applyCounts(await api.swipe(top.item.id, dir));
             i += 1;
+            promote();
+            maybeRefill();
         } catch {
             toast("Could not record that. Please try again.", { type: "error" });
+            mount();
         }
-        show();
+    }
+
+    async function maybeRefill() {
+        if (exhausted || refilling || items.length - i > REFILL_AT) return;
+        refilling = true;
+        try {
+            const data = await api.deck({ q: query.q, category: query.category, limit: 12 });
+            const have = new Set(items.map((x) => x.id));
+            const fresh = ((data && data.items) || []).filter((x) => !have.has(x.id));
+            if (!fresh.length) exhausted = true;
+            else {
+                items.push(...fresh);
+                backfill();
+                if (slots.length) setEnabled(true);
+            }
+        } catch { /* will retry on next decision */ }
+        refilling = false;
+        if (!slots.length) (i < items.length ? mount() : renderEnd());
     }
 
     buttons.forEach((b) =>
-        b.addEventListener("click", () => controller && controller.flick(DIRECTION[b.dataset.kind]))
+        b.addEventListener("click", () => slots[0] && slots[0].controller && slots[0].controller.flick(DIRECTION[b.dataset.kind]))
     );
 
     const onKey = (e) => {
         if (!deck.isConnected) { document.removeEventListener("keydown", onKey); return; }
         const dir = KEYS[e.key];
-        if (dir && controller) { e.preventDefault(); controller.flick(dir); }
+        if (dir && slots[0] && slots[0].controller) { e.preventDefault(); slots[0].controller.flick(dir); }
     };
     document.addEventListener("keydown", onKey);
 
-    show();
+    mount();
 }
