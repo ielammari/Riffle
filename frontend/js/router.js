@@ -25,6 +25,8 @@ function parse() {
 async function render() {
     const { path, query } = parse();
     const handler = routes.get(path) || fallback;
+    // Expose the active route to CSS (e.g. header hidden on auth, footer only on home).
+    document.body.dataset.route = path;
     const view = document.getElementById("app-view");
     view.classList.remove("view-enter");
     view.innerHTML = "";

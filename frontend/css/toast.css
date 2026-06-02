@@ -79,7 +79,7 @@
 .modal__scrim {
     position: absolute;
     inset: 0;
-    background: color-mix(in srgb, var(--black) 58%, transparent);
+    background: color-mix(in srgb, var(--color-bg-ink) 58%, transparent);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
 }
@@ -103,9 +103,10 @@
 
 .modal__title {
     font-family: var(--font-display);
-    font-size: var(--text-lg);
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-size: var(--text-2xl);
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
     margin-bottom: var(--space-3);
 }
 
@@ -134,7 +135,7 @@
     background: var(--color-accent);
     color: var(--color-text-on-accent);
 }
-.btn--primary:hover { background: var(--color-accent-hover); box-shadow: var(--glow-accent); }
+.btn--primary:hover { background: var(--color-accent-hover); box-shadow: var(--shadow-card-hover); }
 
 .btn--danger {
     background: var(--color-danger);

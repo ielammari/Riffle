@@ -13,6 +13,13 @@ function esc(s) {
 }
 function money(n) { return Number(n || 0).toFixed(2); }
 
+// Mono eyebrow above the title: brand if known, else the category slug made readable.
+function eyebrow(c) {
+    if (c.brand) return c.brand;
+    if (c.category) return String(c.category).replace(/-/g, " ");
+    return "Product";
+}
+
 function ratingHTML(c) {
     const r = c.rating != null ? Number(c.rating).toFixed(2) : "n/a";
     return '<div class="detail__rating" title="Rating">' +
@@ -61,6 +68,7 @@ export function openDetail(card) {
         (card.discount_percentage > 0 ? `<span class="detail__badge">-${Math.round(card.discount_percentage)}%</span>` : "") +
         "</div>" +
         '<div class="detail__body">' +
+        `<p class="detail__eyebrow">${esc(eyebrow(card))}</p>` +
         '<h2 class="detail__title"></h2>' +
         ratingHTML(card) +
         '<div class="detail__meta">' + priceHTML(card) + stockHTML(card) + "</div>" +

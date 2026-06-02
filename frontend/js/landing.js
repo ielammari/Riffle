@@ -1,19 +1,16 @@
-// Landing: two-column hero with a mock deck, value strip, how-it-works,
-// alternating feature sections (CSS/SVG mocks), and a closing call to action.
+// Landing: full-bleed plum hero with a product shot, how-it-works, alternating
+// feature sections, an editorial concepts list, and a closing call to action.
+// Category browsing lives in the header "Browse" button (see categories.js).
 
 import { api } from "./api.js";
 import * as router from "./router.js";
 import { setDeckSpec } from "./state.js";
 
-const BOX_GLYPH = "M21 8 12 3 3 8m18 0-9 5m9-5v8l-9 5m0-8L3 8m9 5v8M3 8v8l9 5";
-
 const SWIPES = [
-    { label: "Swipe right", action: "Add to cart", cls: "is-right", arrow: "M5 12h14M13 6l6 6-6 6" },
-    { label: "Swipe down", action: "Second Thoughts", cls: "is-down", arrow: "M12 5v14M6 13l6 6 6-6" },
     { label: "Swipe left", action: "Pass", cls: "is-left", arrow: "M19 12H5M11 6l-6 6 6 6" },
+    { label: "Swipe down", action: "Second Thoughts", cls: "is-down", arrow: "M12 5v14M6 13l6 6 6-6" },
+    { label: "Swipe right", action: "Add to cart", cls: "is-right", arrow: "M5 12h14M13 6l6 6-6 6" },
 ];
-
-const VALUES = ["No recommendation AI", "Seen once per user", "Server-timed holds", "Live product data"];
 
 const CONCEPTS = [
     { title: "Second Thoughts", body: "Not sure? Swipe down to hold it on a countdown. Promote it to the cart before time runs out, or let it go." },
@@ -24,14 +21,14 @@ const CONCEPTS = [
 const FEATURES = [
     {
         kicker: "The deck",
-        title: "One card at a time",
+        title: "One product card at a time",
         body: "No grid, no infinite scroll. Riffle hands you a single product, full-screen. Swipe on a phone, or use the controls and arrow keys on a desktop. Decide, and the next card slides up.",
-        media: mockDeck(),
+        media: '<picture><source media="(max-width: 600px)" srcset="assets/vert.png" /><img class="feature__shot" src="assets/horiz.png" alt="A Riffle product card" loading="lazy" /></picture>',
     },
     {
         kicker: "Second Thoughts",
         title: "A timed holding area",
-        body: "On the fence? Send a card down to Second Thoughts. It waits on a live countdown that the server keeps honest. Promote it to your cart before it runs out, or let it expire.",
+        body: "On the fence? Send a card down to Second Thoughts. It waits on a live countdown. Promote it to your cart before it runs out, or let it expire.",
         media: mockRing(),
     },
     {
@@ -41,25 +38,6 @@ const FEATURES = [
         media: mockRank(),
     },
 ];
-
-function categorySpec(slug) {
-    return { categories: [slug], q: "", min_price: null, max_price: null, min_rating: null, biases: { rating: 0, discount: 0, price: null } };
-}
-
-function mockDeck() {
-    return '<div class="mock-deck" aria-hidden="true">' +
-        '<div class="mock-card mock-card--b2"></div>' +
-        '<div class="mock-card mock-card--b1"></div>' +
-        '<div class="mock-card mock-card--top">' +
-        `<div class="mock-card__img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="${BOX_GLYPH}"/></svg></div>` +
-        '<div class="mock-card__meta"><span class="mock-bar mock-bar--title"></span>' +
-        '<div class="mock-card__row"><span class="mock-price">$129</span><span class="mock-rate">★ 4.8</span></div></div>' +
-        "</div>" +
-        '<span class="mock-cue mock-cue--left">PASS</span>' +
-        '<span class="mock-cue mock-cue--down">SECOND&nbsp;THOUGHTS</span>' +
-        '<span class="mock-cue mock-cue--right">ADD&nbsp;TO&nbsp;CART</span>' +
-        "</div>";
-}
 
 function mockRing() {
     return '<div class="mock-ring" aria-hidden="true">' +
@@ -82,27 +60,19 @@ export function renderLanding(view) {
     root.innerHTML =
         '<div class="hero">' +
             '<div class="hero__copy">' +
-                '<p class="hero__eyebrow">Swipe-to-decide storefront</p>' +
-                '<h1 class="hero__title">RIFFLE</h1>' +
-                '<p class="hero__tagline">decide as you go</p>' +
-                '<p class="hero__pitch">One product at a time. Swipe right to cart, down to reconsider, left to pass. Every item seen once, best first.</p>' +
+                '<h1 class="hero__title">One product.<br>One swipe.<br><span class="hero__title-accent">One decision.</span></h1>' +
+                '<p class="hero__pitch">Swipe right to add, down to reconsider, left to pass. Every item is seen once and ranked best first.</p>' +
                 '<form class="hero__search" role="search">' +
                     '<input class="hero__input" type="search" name="q" autocomplete="off" placeholder="Try cheap wireless headphones under 50" aria-label="Search products" />' +
                     '<button class="hero__go btn btn--primary" type="submit" aria-label="Search">' +
                         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>' +
                     "</button>" +
                 "</form>" +
-                '<div class="chips" id="landing-chips" aria-label="Browse categories"><span class="chips__loading">Loading categories...</span></div>' +
             "</div>" +
             '<div class="hero__stage">' +
-                '<div class="hero__glow" aria-hidden="true"></div>' +
-                mockDeck() +
+                '<img class="hero__shot" src="assets/vert_2.png" alt="A Riffle product card mid-swipe" />' +
             "</div>" +
         "</div>" +
-
-        '<ul class="values" aria-label="What makes Riffle different">' +
-        VALUES.map((v) => `<li class="value">${v}</li>`).join("") +
-        "</ul>" +
 
         '<section class="how" aria-label="How it works">' +
             '<h2 class="how__heading">How Riffle works</h2>' +
@@ -131,7 +101,6 @@ export function renderLanding(view) {
         "</section>" +
 
         '<section class="cta">' +
-            '<div class="cta__glow" aria-hidden="true"></div>' +
             '<h2 class="cta__title">Ready to decide?</h2>' +
             '<p class="cta__sub">Start a deck. Swipe through what is in stock, hold your maybes, and check out when you are done.</p>' +
             '<button type="button" class="btn btn--primary cta__btn">Start swiping</button>' +
@@ -148,26 +117,4 @@ export function renderLanding(view) {
     });
 
     root.querySelector(".cta__btn").addEventListener("click", () => router.navigate("#/deck"));
-
-    loadChips(root.querySelector("#landing-chips"));
-}
-
-async function loadChips(container) {
-    try {
-        const cats = await api.categories();
-        container.innerHTML = "";
-        cats.forEach((c) => {
-            const chip = document.createElement("button");
-            chip.type = "button";
-            chip.className = "chip";
-            chip.textContent = c.name;
-            chip.addEventListener("click", () => {
-                setDeckSpec(categorySpec(c.slug));
-                router.navigate(`#/deck?category=${encodeURIComponent(c.slug)}`);
-            });
-            container.appendChild(chip);
-        });
-    } catch {
-        container.innerHTML = '<span class="chips__loading">Categories unavailable right now.</span>';
-    }
 }

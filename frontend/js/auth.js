@@ -28,6 +28,11 @@ export function renderAuth(view) {
     function draw() {
         const login = mode === "login";
         root.innerHTML =
+            '<aside class="auth__aside" aria-hidden="true">' +
+            '<span class="auth__aside-eyebrow">Join us</span>' +
+            '<p class="auth__aside-headline">Decide as you go</p>' +
+            '<p class="auth__aside-note">One Swipe at a time.</p>' +
+            "</aside>" +
             '<div class="auth__card">' +
             `<h1 class="auth__title">${login ? "Welcome back" : "Join Riffle"}</h1>` +
             `<p class="auth__sub">${login ? "Sign in to keep swiping." : "Create an account to start swiping."}</p>` +

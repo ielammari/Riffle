@@ -4,7 +4,7 @@
 import { api } from "./api.js";
 import { toast } from "./toast.js";
 import { setSettings } from "./state.js";
-import { applyAppearance, accentList } from "./appearance.js";
+import { applyAppearance } from "./appearance.js";
 
 function esc(s) {
     return String(s).replace(/[&<>"']/g, (ch) =>
@@ -49,8 +49,6 @@ export async function renderSettings(view) {
         .map((o) => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join("");
     const curOpts = schema.currency.options
         .map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join("");
-    const swatches = accentList()
-        .map((a) => `<button type="button" class="swatch" data-accent="${esc(a.value)}" aria-label="${esc(a.label)}" title="${esc(a.label)}"><span class="swatch__dot" style="background:${esc(a.color)}"></span><span class="swatch__name">${esc(a.label)}</span></button>`).join("");
 
     root.innerHTML =
         '<header class="settings__head"><h1 class="settings__title">Settings</h1>' +
@@ -80,9 +78,11 @@ export async function renderSettings(view) {
 
         '<section class="settings__group"><h2 class="settings__group-title">Appearance</h2>' +
         '<div class="setting">' +
-        '<div class="setting__label"><span>Accent</span><span class="setting__hint">The glow color across the app.</span></div>' +
-        `<div class="setting__control swatches" id="set-accent">${swatches}</div>` +
-        "</div>" +
+        '<div class="setting__label"><span>Theme</span><span class="setting__hint">Light or dark surfaces across the app.</span></div>' +
+        '<div class="setting__control toggle" id="set-theme" role="group" aria-label="Theme">' +
+        '<button type="button" class="toggle__opt" data-theme="light">Light</button>' +
+        '<button type="button" class="toggle__opt" data-theme="dark">Dark</button>' +
+        "</div></div>" +
         '<div class="setting">' +
         '<div class="setting__label"><span>Motion</span><span class="setting__hint">Turn off animated transitions and the swipe fling.</span></div>' +
         '<div class="setting__control toggle" id="set-motion" role="group" aria-label="Motion">' +
@@ -106,15 +106,15 @@ export async function renderSettings(view) {
     rank.value = current.ranking;
     cur.value = current.currency;
 
-    function markAccent() {
-        root.querySelectorAll(".swatch").forEach((b) =>
-            b.classList.toggle("is-active", b.dataset.accent === current.accent));
+    function markTheme() {
+        root.querySelectorAll("#set-theme .toggle__opt").forEach((b) =>
+            b.classList.toggle("is-active", b.dataset.theme === current.theme));
     }
     function markMotion() {
         root.querySelectorAll("#set-motion .toggle__opt").forEach((b) =>
             b.classList.toggle("is-active", b.dataset.motion === current.motion));
     }
-    markAccent();
+    markTheme();
     markMotion();
 
     deck.addEventListener("input", () => { current.deck_limit = Number(deck.value); outDeck.textContent = deck.value; });
@@ -122,10 +122,10 @@ export async function renderSettings(view) {
     rank.addEventListener("change", () => { current.ranking = rank.value; });
     cur.addEventListener("change", () => { current.currency = cur.value; });
 
-    root.querySelectorAll(".swatch").forEach((b) =>
+    root.querySelectorAll("#set-theme .toggle__opt").forEach((b) =>
         b.addEventListener("click", () => {
-            current.accent = b.dataset.accent;
-            markAccent();
+            current.theme = b.dataset.theme;
+            markTheme();
             applyAppearance(current); // live preview
         }));
     root.querySelectorAll("#set-motion .toggle__opt").forEach((b) =>

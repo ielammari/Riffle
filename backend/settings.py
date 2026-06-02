@@ -27,8 +27,8 @@ def _validate(patch, base):
         cur = str(patch["currency"]).strip()
         if 1 <= len(cur) <= 4:
             out["currency"] = cur
-    if "accent" in patch and patch["accent"] in Config.ACCENT_OPTIONS:
-        out["accent"] = patch["accent"]
+    if "theme" in patch and patch["theme"] in Config.THEME_OPTIONS:
+        out["theme"] = patch["theme"]
     if "motion" in patch and patch["motion"] in ("on", "off"):
         out["motion"] = patch["motion"]
     return out
@@ -65,7 +65,7 @@ def settings_schema():
             {"value": "low_price", "label": "Lowest price"},
         ]},
         "currency": {"options": Config.CURRENCY_OPTIONS},
-        "accent": {"options": Config.ACCENT_OPTIONS},
+        "theme": {"options": Config.THEME_OPTIONS},
         "motion": {"options": ["on", "off"]},
     }
 

@@ -1,0 +1,119 @@
+/* Category browser: a plum panel that slides down from the top, listing plain
+   category titles (no pills). Titles fade in one after another. */
+
+.cat-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1150;
+}
+
+.cat-overlay__scrim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-bg-ink) 50%, transparent);
+    opacity: 0;
+    transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.cat-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-ink);
+    color: var(--color-text-on-ink);
+    padding: calc(var(--header-height) + var(--space-8)) var(--space-5) var(--space-12);
+    transform: translateY(-100%);
+    transition: transform var(--dur-slow) var(--ease-out);
+    max-height: 90dvh;
+    overflow-y: auto;
+}
+
+.cat-overlay--in .cat-overlay__scrim { opacity: 1; }
+.cat-overlay--in .cat-panel { transform: translateY(0); }
+.cat-overlay--out .cat-overlay__scrim { opacity: 0; }
+.cat-overlay--out .cat-panel { transform: translateY(-100%); }
+
+.cat-panel__eyebrow {
+    max-width: var(--content-max);
+    margin: 0 auto var(--space-6);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-xs);
+    color: var(--color-accent-on-ink);
+}
+
+.cat-list {
+    max-width: var(--content-max);
+    margin: 0 auto;
+    /* Lay categories side by side so the panel stays short: 3 cols desktop. */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--space-8);
+}
+@media (max-width: 900px) {
+    .cat-list { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+    .cat-list { grid-template-columns: 1fr; }
+}
+.cat-list__loading { color: var(--color-text-on-ink-muted); font-family: var(--font-mono); font-size: var(--text-sm); }
+
+.cat-list__item {
+    --i: 0;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: cat-reveal var(--dur-base) var(--ease-out) forwards;
+    animation-delay: calc(var(--i) * 55ms + 120ms);
+}
+
+@keyframes cat-reveal {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cat-link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    width: 100%;
+    padding: var(--space-3) 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-bg-ink-2);
+    text-align: left;
+    color: var(--color-text-on-ink);
+    cursor: pointer;
+    transition: color var(--transition-fast), padding-left var(--transition-fast);
+}
+.cat-link__index {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-on-ink-muted);
+    transition: color var(--transition-fast);
+}
+.cat-link__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: var(--tracking-tight);
+    line-height: var(--leading-tight);
+    font-size: var(--text-2xl);
+    text-transform: capitalize;
+}
+.cat-link:hover,
+.cat-link:focus-visible {
+    outline: none;
+    color: var(--color-accent-on-ink);
+    padding-left: var(--space-3);
+}
+.cat-link:hover .cat-link__index,
+.cat-link:focus-visible .cat-link__index { color: var(--color-accent-on-ink); }
+
+@media (max-width: 600px) {
+    .cat-link__name { font-size: var(--text-xl); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cat-overlay__scrim, .cat-panel { transition: none; }
+    .cat-list__item { animation: none; opacity: 1; transform: none; }
+}

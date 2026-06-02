@@ -1,15 +1,31 @@
 /* Settings page: grouped preference cards with sliders, selects, swatches, toggles. */
 
 .settings {
-    max-width: 760px;
+    max-width: var(--content-max);
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    align-content: start;
+}
+
+/* Editorial frame: header sits in the left rail, groups flow on the right. */
+@media (min-width: 880px) {
+    .settings {
+        grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+        column-gap: var(--space-12);
+        row-gap: var(--space-6);
+        align-items: start;
+    }
+    .settings__head { grid-column: 1; position: sticky; top: calc(var(--header-height) + var(--space-6)); }
+    .settings__group,
+    .settings__skeleton,
+    .settings__actions,
+    .settings__state { grid-column: 2; }
 }
 
 .settings__head { display: flex; flex-direction: column; gap: var(--space-2); }
-.settings__title { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.05em; font-size: clamp(1.4rem, 4vw, 1.9rem); }
+.settings__title { font-family: var(--font-display); font-weight: 800; letter-spacing: var(--tracking-tight); line-height: var(--leading-tight); font-size: var(--text-4xl); }
 .settings__sub { color: var(--color-text-secondary); }
 
 .settings__skeleton {
@@ -20,28 +36,28 @@
     animation: deck-shimmer 1.2s linear infinite;
 }
 
+/* Each group is a section led by a mono eyebrow, divided by a hairline. */
 .settings__group {
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
+    padding: var(--space-8) 0;
+    border-top: 1px solid var(--color-border);
     display: flex;
     flex-direction: column;
-    gap: var(--space-4);
+    gap: var(--space-6);
 }
+.settings__group:first-of-type { border-top: none; padding-top: 0; }
 .settings__group-title {
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-accent);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-accent-text);
 }
 
 .setting {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-4);
+    gap: var(--space-6);
     flex-wrap: wrap;
 }
 .setting__label { display: flex; flex-direction: column; gap: 2px; flex: 1 1 220px; }
@@ -51,14 +67,14 @@
 .setting__control { flex: 0 0 auto; }
 .setting__control.range { display: flex; align-items: center; gap: var(--space-3); width: min(280px, 60vw); }
 
-/* ---- Range slider ---- */
+/* ---- Range slider: token track, accent thumb ---- */
 input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     flex: 1;
-    height: 6px;
+    height: 4px;
     border-radius: var(--radius-pill);
-    background: var(--color-bg-elevated);
+    background: var(--color-border-strong);
     outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
@@ -67,17 +83,17 @@ input[type="range"]::-webkit-slider-thumb {
     width: 20px; height: 20px;
     border-radius: 50%;
     background: var(--color-accent);
-    border: 2px solid var(--color-bg-page);
-    box-shadow: var(--glow-accent-lg);
+    border: 2px solid var(--color-bg-surface);
     cursor: pointer;
 }
 input[type="range"]::-moz-range-thumb {
     width: 18px; height: 18px;
     border-radius: 50%;
     background: var(--color-accent);
-    border: 2px solid var(--color-bg-page);
+    border: 2px solid var(--color-bg-surface);
     cursor: pointer;
 }
+input[type="range"]:focus-visible { box-shadow: var(--glow-accent); border-radius: var(--radius-pill); }
 .range__out {
     min-width: 56px;
     text-align: right;
@@ -101,25 +117,6 @@ input[type="range"]::-moz-range-thumb {
 }
 .select:focus { outline: none; border-color: var(--color-border-accent); box-shadow: var(--glow-accent); }
 
-/* ---- Accent swatches ---- */
-.swatches { display: flex; gap: var(--space-2); flex-wrap: wrap; }
-.swatch {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-pill);
-    background: var(--color-bg-surface-2);
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    font-size: var(--text-sm);
-    font-weight: 600;
-    transition: border-color var(--transition-fast), color var(--transition-fast);
-}
-.swatch__dot { width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 8px rgba(0,0,0,.4); }
-.swatch:hover { color: var(--color-text-primary); }
-.swatch.is-active { border-color: var(--color-accent); color: var(--color-text-primary); box-shadow: var(--glow-accent); }
-
 /* ---- Toggle (segmented) ---- */
 .toggle {
     display: inline-flex;
@@ -141,20 +138,49 @@ input[type="range"]::-moz-range-thumb {
     transition: background var(--transition-fast), color var(--transition-fast);
 }
 .toggle__opt.is-active { background: var(--color-accent); color: var(--color-text-on-accent); }
+.toggle__opt:focus-visible { outline: none; box-shadow: var(--glow-accent); }
 
-/* ---- Actions ---- */
+/* ---- Actions: teal CTA save, restrained crimson discard ---- */
 .settings__actions {
     position: sticky;
     bottom: 0;
     display: flex;
     justify-content: flex-end;
-    gap: var(--space-3);
-    padding: var(--space-4) 0;
-    background: linear-gradient(to top, var(--color-bg-page) 60%, transparent);
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-page);
+}
+.settings__actions #set-save.btn {
+    background: var(--color-cta);
+    color: var(--color-text-on-accent);
+    border-radius: var(--radius-lg);
+    height: 48px;
+    padding: 0 var(--space-7);
+}
+.settings__actions #set-save.btn:hover {
+    background: var(--color-cta-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+}
+/* Discard is a quiet crimson text link, not a filled button. */
+.settings__actions #set-cancel.btn {
+    background: transparent;
+    border: none;
+    padding: 0 var(--space-2);
+    color: var(--color-danger);
+    font-weight: 600;
+}
+.settings__actions #set-cancel.btn:hover {
+    background: transparent;
+    box-shadow: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .settings__state { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding: var(--space-8) var(--space-4); }
-.settings__state-title { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; }
+.settings__state-title { font-family: var(--font-display); font-weight: 800; letter-spacing: var(--tracking-tight); line-height: var(--leading-tight); font-size: var(--text-3xl); }
 .settings__state-sub { color: var(--color-text-secondary); }
 
 @media (max-width: 560px) {
