@@ -23,6 +23,13 @@
 }
 .card.is-grabbing { cursor: grabbing; }
 
+/* Hover: a calm -2px lift, never a glow. Only the live top card, and not
+   while it is being dragged (swipe.js drives the transform then). */
+.card:hover:not(.is-grabbing):not(.card--rear) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+}
+
 @keyframes card-in { from { opacity: 0; } to { opacity: 1; } }
 
 /* Rear cards in the stack (non-interactive, scaled, dimmed, translated up). */
@@ -101,8 +108,8 @@
     transform: translateX(-50%);
     padding: 2px var(--space-3);
     border-radius: var(--radius-pill);
-    background: color-mix(in srgb, var(--black) 55%, transparent);
-    color: var(--gray-100);
+    background: color-mix(in srgb, var(--color-bg-ink) 65%, transparent);
+    color: var(--color-text-on-ink);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
 }
@@ -132,9 +139,11 @@
 .card__price { display: inline-flex; align-items: baseline; gap: var(--space-3); font-variant-numeric: tabular-nums; }
 .card__now { font-family: var(--font-mono); font-weight: 700; font-size: var(--text-xl); color: var(--color-text-primary); }
 .card__orig { font-family: var(--font-mono); color: var(--color-text-muted); text-decoration: line-through; font-size: var(--text-base); }
+/* On sale (original price present) the current price reads as the sale price. */
+.card__price:has(.card__orig) .card__now { color: var(--color-discount); }
 
 .card__stock { padding: 3px var(--space-3); border-radius: var(--radius-pill); font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.02em; }
-.card__stock.is-in { color: var(--color-accent); background: var(--color-accent-soft); }
+.card__stock.is-in { color: var(--color-accent-text); background: var(--color-accent-soft); }
 .card__stock.is-low { color: var(--color-hold); background: var(--color-hold-soft); }
 .card__stock.is-out { color: var(--color-danger); background: color-mix(in srgb, var(--color-danger) 14%, transparent); }
 
@@ -169,9 +178,9 @@
     opacity: 0;
     transition: opacity 80ms linear;
 }
-.card__cue.is-right { right: var(--space-5); color: var(--color-accept); transform: rotate(-12deg); }
-.card__cue.is-left { left: var(--space-5); color: var(--color-reject); transform: rotate(12deg); }
-.card__cue.is-down { left: 50%; top: auto; bottom: var(--space-7); transform: translateX(-50%); color: var(--color-hold); }
+.card__cue.is-right { right: var(--space-5); color: var(--swipe-right); transform: rotate(-12deg); }
+.card__cue.is-left { left: var(--space-5); color: var(--swipe-left); transform: rotate(12deg); }
+.card__cue.is-down { left: 50%; top: auto; bottom: var(--space-7); transform: translateX(-50%); color: var(--swipe-down); }
 
 /* Phone: image on top, then the data (title, rating, price, stock) always
    visible, then the description fills the rest.*/

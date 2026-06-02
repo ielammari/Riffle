@@ -8,14 +8,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* keyboard focus ring, on-palette */
-:focus-visible {
-    outline: none;
-    box-shadow: var(--glow-accent);
-    border-radius: var(--radius-md);
-}
-
-/* Keep autofilled inputs on the dark surface (browser forces white otherwise). */
+/* Keep autofilled inputs on the light surface (browser forces its own otherwise). */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -25,24 +18,28 @@ input:-webkit-autofill:focus {
     transition: background-color 9999s ease-in-out 0s;
 }
 
-/* ---- Header (frosted glass over the dark canvas) ---- */
+/* ---- Header (light, hairline bottom, sticky) ---- */
 .app-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: color-mix(in srgb, var(--color-bg-surface) 72%, transparent);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--color-bg-surface) 45%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--color-border);
     box-shadow: var(--shadow-header);
 }
+
+/* Auth page is a full-screen split: hide the chrome. Footer shows on home only. */
+body[data-route="/login"] .app-header { display: none; }
+body:not([data-route="/"]) .site-footer { display: none; }
 
 .app-header__inner {
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    height: 64px;
-    max-width: 1100px;
+    height: var(--header-height);
+    max-width: var(--content-max);
     margin: 0 auto;
     padding: 0 var(--space-5);
 }
@@ -56,17 +53,16 @@ input:-webkit-autofill:focus {
 }
 
 .brand__mark {
-    width: 26px;
-    height: 26px;
+    width: 29px;
+    height: 29px;
     color: var(--color-accent);
-    filter: drop-shadow(0 0 6px var(--color-accent-soft));
 }
 
 .brand__name {
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.16em;
+    font-weight: 800;
+    font-size: 1.3rem;
+    letter-spacing: var(--tracking-tight);
 }
 
 .app-nav {
@@ -79,8 +75,8 @@ input:-webkit-autofill:focus {
     position: relative;
     display: grid;
     place-items: center;
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-md);
     color: var(--color-text-secondary);
     background: transparent;
@@ -88,13 +84,45 @@ input:-webkit-autofill:focus {
 }
 
 .iconbtn svg {
-    width: 22px;
-    height: 22px;
+    width: 25px;
+    height: 25px;
 }
 
 .iconbtn:hover {
-    background: var(--color-bg-elevated);
+    background: var(--color-bg-surface-2);
     color: var(--color-text-primary);
+}
+
+/* ---- Category "Browse" button: special, fills with the brand accent ---- */
+.cat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    height: 42px;
+    padding: 0 var(--space-5) 0 var(--space-4);
+    margin-right: var(--space-1);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border-accent);
+    background: var(--color-accent-soft);
+    color: var(--color-accent-text);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+.cat-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+.cat-btn:hover,
+.cat-btn[aria-expanded="true"] {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-on-accent);
+}
+@media (max-width: 600px) {
+    .cat-btn__label { display: none; }
+    .cat-btn { padding: 0; width: 48px; justify-content: center; }
 }
 
 .badge {
@@ -106,14 +134,14 @@ input:-webkit-autofill:focus {
     padding: 0 5px;
     display: grid;
     place-items: center;
-    background: var(--color-accent);
+    background: var(--color-discount);
     color: var(--color-text-on-accent);
     font-family: var(--font-mono);
     font-size: 0.65rem;
     font-weight: 700;
     line-height: 1;
     border-radius: var(--radius-pill);
-    box-shadow: 0 0 0 2px var(--color-bg-page);
+    box-shadow: 0 0 0 2px var(--color-bg-surface);
 }
 
 .badge[hidden] {
@@ -126,13 +154,13 @@ input:-webkit-autofill:focus {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    height: 38px;
-    padding: 0 var(--space-4);
+    height: 42px;
+    padding: 0 var(--space-5);
     border-radius: var(--radius-pill);
-    background: var(--color-bg-elevated);
-    border: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-strong);
     color: var(--color-text-primary);
-    font-size: var(--text-base);
+    font-size: var(--text-md);
     font-weight: 600;
     transition: border-color var(--transition-fast), background var(--transition-fast);
 }
@@ -140,21 +168,40 @@ input:-webkit-autofill:focus {
 .account__login:hover,
 .account__btn:hover {
     border-color: var(--color-border-accent);
+    background: var(--color-bg-surface-2);
 }
 
 /* ---- View container ---- */
 .app-view {
-    max-width: 1100px;
+    max-width: var(--content-max);
     margin: 0 auto;
     padding: var(--space-6) var(--space-5) var(--space-8);
     outline: none;
 }
 
-.view-enter {
-    animation: view-in var(--dur-base) var(--ease-out);
+/* Full-bleed: let a section escape the centered .app-view to the viewport
+   edges (the hero and footer plum bands span the screen this way). Apply the
+   class in markup, or replicate the two declarations on a specific section. */
+.full-bleed {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
 }
 
-@keyframes view-in {
+/* One orchestrated entrance per view: the sections of the view (the children
+   of its single wrapper) fade + rise in a ~70ms stagger. fill-mode: both keeps
+   each section hidden until its delay so nothing flashes in first. */
+.view-enter > * > * {
+    animation: reveal-up var(--dur-base) var(--ease-out) both;
+}
+.view-enter > * > :nth-child(1) { animation-delay: 0ms; }
+.view-enter > * > :nth-child(2) { animation-delay: 70ms; }
+.view-enter > * > :nth-child(3) { animation-delay: 140ms; }
+.view-enter > * > :nth-child(4) { animation-delay: 210ms; }
+.view-enter > * > :nth-child(5) { animation-delay: 280ms; }
+.view-enter > * > :nth-child(6) { animation-delay: 350ms; }
+.view-enter > * > :nth-child(n+7) { animation-delay: 420ms; }
+
+@keyframes reveal-up {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
@@ -203,7 +250,8 @@ input:-webkit-autofill:focus {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .view-enter { animation: none; }
+    .view-enter,
+    .view-enter > * > * { animation: none; }
     * { scroll-behavior: auto; }
 }
 

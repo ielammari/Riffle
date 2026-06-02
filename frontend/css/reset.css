@@ -44,9 +44,10 @@ input {
     font-size: inherit;
 }
 
+/* Hide scrollbars everywhere while keeping scroll/swipe functional. */
 * {
     scrollbar-width: none;       /* Firefox */
-    -ms-overflow-style: none;    /* Edge/IE */
+    -ms-overflow-style: none;    /* old Edge/IE */
 }
 *::-webkit-scrollbar {           /* Chrome, Safari */
     width: 0;

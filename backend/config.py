@@ -46,13 +46,13 @@ class Config:
     }
 
     CURRENCY_OPTIONS = ["$", "€", "£", "¥", "DH", "kr"]
-    ACCENT_OPTIONS = ["cyan", "violet", "magenta", "lime"]
+    THEME_OPTIONS = ["light", "dark"]
 
     SETTINGS_DEFAULTS = {
         "deck_limit": DECK_LIMIT_DEFAULT,
         "st_seconds": SECOND_THOUGHTS_TTL_SECONDS,
         "ranking": "balanced",
         "currency": CURRENCY,
-        "accent": "cyan",
+        "theme": "light",
         "motion": "on",
     }

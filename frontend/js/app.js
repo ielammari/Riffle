@@ -11,6 +11,7 @@ import { openTray } from "./secondThoughts.js";
 import { renderCart } from "./cart.js";
 import { renderSettings } from "./settings.js";
 import { applyAppearance, applyStoredAppearance, clearStoredAppearance } from "./appearance.js";
+import { toggleCategories, closeCategories } from "./categories.js";
 
 applyStoredAppearance();
 
@@ -153,6 +154,12 @@ router.register("/cart", guard((v) => renderCart(v)));
 router.register("/settings", guard((v) => renderSettings(v)));
 router.setDefault((v) => placeholder(v, "Not found", "That page doesn’t exist."));
 
+const browseBtn = document.getElementById("nav-browse");
+if (browseBtn) {
+    browseBtn.addEventListener("click", (e) => { e.stopPropagation(); toggleCategories(browseBtn); });
+    // Close the category panel whenever the route changes.
+    window.addEventListener("hashchange", () => closeCategories(browseBtn));
+}
 document.getElementById("nav-cart").addEventListener("click", () => router.navigate("#/cart"));
 document.getElementById("nav-tray").addEventListener("click", () => {
     if (getState().user) openTray();

@@ -38,6 +38,8 @@ def build_card(p, currency=None):
     return {
         "id": p.get("id"),
         "title": p.get("title"),
+        "brand": p.get("brand"),
+        "category": p.get("category"),
         "description": p.get("description"),
         "price": price,
         "original_price": _original_price(price, discount),

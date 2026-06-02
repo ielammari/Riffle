@@ -1,19 +1,67 @@
 /* Auth card + form, and the header account menu. */
 
+/* Full-bleed split: a plum .auth__aside panel on one side, the form on the other. */
 .auth {
-    min-height: 60vh;
+    /* escape the centered .app-view and cancel its padding to span the screen
+       (the header is hidden on this route, so the split owns the full viewport) */
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    margin-block: calc(-1 * var(--space-6)) calc(-1 * var(--space-8));
+    min-height: 100dvh;
     display: grid;
-    place-items: center;
-    padding: var(--space-6) var(--space-4);
+    grid-template-columns: 1fr;
+}
+
+.auth__aside {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-3);
+    padding: var(--space-12) var(--space-10);
+    background: var(--color-bg-ink);
+    color: var(--color-text-on-ink);
+}
+.auth__aside-eyebrow {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    font-size: var(--text-md);
+    color: var(--color-accent-on-ink);
+    padding-bottom: var(--space-3);
+}
+.auth__aside-headline {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: var(--text-5xl);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+}
+.auth__aside-note {
+    color: var(--color-accent);
+    line-height: var(--leading-tight);
+    max-width: var(--measure);
+
+    font-weight: 800;
+    font-size: var(--text-5xl);
+    padding-left: var(--space-12);
 }
 
 .auth__card {
-    width: min(400px, 100%);
-    background: var(--color-bg-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-7);
-    box-shadow: var(--shadow-card);
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    align-self: center;
+    padding: var(--space-12) var(--space-6);
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+@media (min-width: 820px) {
+    .auth { grid-template-columns: 1.1fr 1fr; }
+    .auth__aside { display: flex; }
+    .auth__card { padding: var(--space-12) var(--space-10); }
 }
 
 .auth__title {
@@ -91,7 +139,7 @@
     height: 34px;
     padding: 0 var(--space-3);
     border-radius: var(--radius-sm);
-    color: var(--color-accent);
+    color: var(--color-accent-text);
     background: transparent;
     font-size: var(--text-sm);
     font-weight: 600;
@@ -110,9 +158,21 @@
     padding: var(--space-2) var(--space-3);
 }
 
-.auth__submit {
+/* Primary submit is the deep-teal CTA, not the bright-teal accent fill. */
+.auth__submit.btn {
     width: 100%;
     margin-top: var(--space-2);
+    height: 48px;
+    border-radius: var(--radius-lg);
+    background: var(--color-cta);
+    color: var(--color-text-on-accent);
+    font-weight: 700;
+    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.auth__submit.btn:hover {
+    background: var(--color-cta-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
 }
 
 .auth__submit.is-loading {
@@ -132,7 +192,7 @@
 }
 
 .linkbtn {
-    color: var(--color-accent);
+    color: var(--color-accent-text);
     background: transparent;
     font-weight: 600;
     font-size: inherit;
