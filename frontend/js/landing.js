@@ -2,9 +2,7 @@
 // feature sections, an editorial concepts list, and a closing call to action.
 // Category browsing lives in the header "Browse" button (see categories.js).
 
-import { api } from "./api.js";
 import * as router from "./router.js";
-import { setDeckSpec } from "./state.js";
 
 const SWIPES = [
     { label: "Swipe left", action: "Pass", cls: "is-left", arrow: "M19 12H5M11 6l-6 6 6 6" },
@@ -108,11 +106,10 @@ export function renderLanding(view) {
 
     view.appendChild(root);
 
-    root.querySelector(".hero__search").addEventListener("submit", async (e) => {
+    root.querySelector(".hero__search").addEventListener("submit", (e) => {
         e.preventDefault();
         const q = root.querySelector(".hero__input").value.trim();
         if (!q) return;
-        try { setDeckSpec(await api.parse(q)); } catch { setDeckSpec(null); }
         router.navigate(`#/deck?q=${encodeURIComponent(q)}`);
     });
 

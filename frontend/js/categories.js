@@ -3,19 +3,10 @@
 
 import { api } from "./api.js";
 import * as router from "./router.js";
-import { setDeckSpec } from "./state.js";
+import { esc } from "./format.js";
 
 let panel = null;
 let cache = null;
-
-function categorySpec(slug) {
-    return { categories: [slug], q: "", min_price: null, max_price: null, min_rating: null, biases: { rating: 0, discount: 0, price: null } };
-}
-
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
 
 export function toggleCategories(btn) {
     if (panel) { closeCategories(); return; }
@@ -62,7 +53,6 @@ async function openCategories(btn) {
         a.className = "cat-link";
         a.innerHTML = `<span class="cat-link__index">${String(i + 1).padStart(2, "0")}</span><span class="cat-link__name">${esc(c.name)}</span>`;
         a.addEventListener("click", () => {
-            setDeckSpec(categorySpec(c.slug));
             closeCategories(btn);
             router.navigate(`#/deck?category=${encodeURIComponent(c.slug)}`);
         });

@@ -1,15 +1,10 @@
-// Settings page: per-user preferences (deck size, ranking, timer, currency, accent, motion).
+// Settings page: per-user preferences (deck size, ranking, timer, currency, theme, motion).
 // Functional knobs persist on Save; appearance previews live so the change is visible.
 
 import { api } from "./api.js";
 import { toast } from "./toast.js";
-import { setSettings } from "./state.js";
 import { applyAppearance } from "./appearance.js";
-
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
+import { esc } from "./format.js";
 
 function fmtDur(s) {
     s = Number(s) || 0;
@@ -43,7 +38,6 @@ export async function renderSettings(view) {
 
     const schema = data.schema;
     const current = { ...data.settings };
-    setSettings(current);
 
     const rankOpts = schema.ranking.options
         .map((o) => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join("");
@@ -148,7 +142,6 @@ export async function renderSettings(view) {
         save.textContent = "Saving…";
         try {
             const res = await api.settingsUpdate(current);
-            setSettings(res.settings);
             applyAppearance(res.settings);
             data.settings = { ...res.settings };
             Object.assign(current, res.settings);

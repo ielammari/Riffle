@@ -3,7 +3,7 @@
 import { api } from "./api.js";
 import * as router from "./router.js";
 import { toast, confirmModal } from "./toast.js";
-import { getState, subscribe, setUser, applyCounts, setSettings } from "./state.js";
+import { getState, subscribe, setUser, applyCounts } from "./state.js";
 import { renderAuth, setIntended } from "./auth.js";
 import { renderLanding } from "./landing.js";
 import { renderDeck } from "./deck.js";
@@ -69,7 +69,6 @@ function accountMenu(username) {
         closeMenu();
         try { await api.logout(); } catch { /* ignore */ }
         setUser(null);
-        setSettings(null);
         clearStoredAppearance();
         applyCounts({ cart_count: 0, second_thoughts_count: 0 });
         toast("Signed out", { type: "info" });
@@ -166,8 +165,6 @@ document.getElementById("nav-tray").addEventListener("click", () => {
     else router.navigate("#/login");
 });
 
-window.riffle = { api, toast, confirmModal, state: getState() };
-
 document.addEventListener("click", (e) => {
     const s = e.target.closest("[data-social]");
     if (s) toast("Social links are placeholders in this demo.", { type: "info" });
@@ -181,6 +178,6 @@ renderHeader(getState());
     router.start();
     if (getState().user) {
         api.secondThoughts().then(applyCounts).catch(() => {});
-        api.settings().then((d) => { setSettings(d.settings); applyAppearance(d.settings); }).catch(() => {});
+        api.settings().then((d) => applyAppearance(d.settings)).catch(() => {});
     }
 })();
