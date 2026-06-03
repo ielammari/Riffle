@@ -1,17 +1,13 @@
 // Product detail spotlight: a centered modal over a dimmed backdrop showing the full product.
 // Shared by the deck card (info button), the cart, and Second Thoughts.
 
+import { esc, money } from "./format.js";
+
 const ARROW_L = "M15 18l-6-6 6-6";
 const ARROW_R = "M9 6l6 6-6 6";
 const STAR = "M12 2.5l2.9 5.9 6.5.95-4.7 4.58 1.1 6.47L12 17.9 6.2 20.9l1.1-6.47L2.6 9.85l6.5-.95z";
 
 let openInstance = null;
-
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
-function money(n) { return Number(n || 0).toFixed(2); }
 
 // Mono eyebrow above the title: brand if known, else the category slug made readable.
 function eyebrow(c) {

@@ -4,16 +4,12 @@ import { api } from "./api.js";
 import { toast } from "./toast.js";
 import { applyCounts } from "./state.js";
 import { openDetail } from "./detail.js";
+import { esc, money } from "./format.js";
 
 const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
 const MINUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>';
 const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
 
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
-function fmt(n) { return Number(n || 0).toFixed(2); }
 
 export async function renderCart(view) {
     const root = document.createElement("section");
@@ -39,7 +35,7 @@ export async function renderCart(view) {
     function setSummary(d) {
         const sub = root.querySelector(".cart__subtotal-val");
         const cnt = root.querySelector(".cart__count");
-        if (sub) sub.textContent = `${d.currency}${fmt(d.subtotal)}`;
+        if (sub) sub.textContent = `${d.currency}${money(d.subtotal)}`;
         if (cnt) cnt.textContent = `${d.count} item${d.count === 1 ? "" : "s"}`;
     }
 
@@ -82,8 +78,8 @@ export async function renderCart(view) {
             '<div class="cart-item__line"></div>' +
             `<button type="button" class="cart-item__remove" aria-label="Remove from cart">${TRASH}</button></div>`;
         li.querySelector(".cart-item__title").textContent = it.title || "";
-        li.querySelector(".cart-item__unit").textContent = `${it.currency}${fmt(it.price)} each`;
-        li.querySelector(".cart-item__line").textContent = `${it.currency}${fmt(it.line_total)}`;
+        li.querySelector(".cart-item__unit").textContent = `${it.currency}${money(it.price)} each`;
+        li.querySelector(".cart-item__line").textContent = `${it.currency}${money(it.line_total)}`;
         li.querySelector('[data-act="dec"]').disabled = it.qty <= 1;
 
         li.querySelector(".cart-item__open").addEventListener("click", () => openDetail(it));
@@ -105,7 +101,7 @@ export async function renderCart(view) {
             const it = d.items.find((x) => x.id === id);
             if (it) {
                 li.querySelector(".qty-val").textContent = it.qty;
-                li.querySelector(".cart-item__line").textContent = `${it.currency}${fmt(it.line_total)}`;
+                li.querySelector(".cart-item__line").textContent = `${it.currency}${money(it.line_total)}`;
             }
             setSummary(d);
         } catch {

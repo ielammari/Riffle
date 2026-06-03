@@ -6,25 +6,7 @@ import { applyAppearance, clearStoredAppearance } from "./appearance.js";
 const state = {
     user: null,
     counts: { cart_count: 0, second_thoughts_count: 0 },
-    deckSpec: null,
-    settings: null,
 };
-
-export function setDeckSpec(spec) {
-    state.deckSpec = spec;
-}
-
-export function getDeckSpec() {
-    return state.deckSpec;
-}
-
-export function setSettings(settings) {
-    state.settings = settings;
-}
-
-export function getSettings() {
-    return state.settings;
-}
 
 const subscribers = new Set();
 
@@ -67,12 +49,10 @@ export async function refreshSession() {
         try { applyCounts(await api.secondThoughts()); } catch { /* offline */ }
         try {
             const d = await api.settings();
-            state.settings = d.settings;
             applyAppearance(d.settings);
         } catch { /* offline */ }
     } else {
         state.counts = { cart_count: 0, second_thoughts_count: 0 };
-        state.settings = null;
         clearStoredAppearance();
     }
     notify();

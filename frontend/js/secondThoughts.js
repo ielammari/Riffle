@@ -4,6 +4,7 @@ import { api } from "./api.js";
 import { toast } from "./toast.js";
 import { applyCounts } from "./state.js";
 import { openDetail } from "./detail.js";
+import { esc, money } from "./format.js";
 
 const RADIUS = 20;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -11,15 +12,6 @@ const CART_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
 const X_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6 18 18M18 6 6 18"/></svg>';
 
 let openInstance = null;
-
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
-
-function money(item) {
-    return `${item.currency || ""}${Number(item.price || 0).toFixed(2)}`;
-}
 
 function emptyHTML() {
     return '<div class="tray-empty"><p class="tray-empty__title">No second thoughts</p>' +
@@ -41,7 +33,7 @@ function makeRow(item) {
         `<button type="button" class="tray-act tray-act--promote" aria-label="Promote to cart">${CART_ICON}</button>` +
         `<button type="button" class="tray-act tray-act--release" aria-label="Let go">${X_ICON}</button></div>`;
     li.querySelector(".tray-item__title").textContent = item.title || "";
-    li.querySelector(".tray-item__price").textContent = money(item);
+    li.querySelector(".tray-item__price").textContent = `${item.currency || ""}${money(item.price)}`;
     li.querySelector(".tray-item__open").addEventListener("click", () => openDetail(item));
     return {
         el: li,

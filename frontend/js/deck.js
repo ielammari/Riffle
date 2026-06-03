@@ -5,6 +5,7 @@ import { createCard } from "./card.js";
 import { makeSwipeable } from "./swipe.js";
 import { applyCounts } from "./state.js";
 import { toast } from "./toast.js";
+import { esc } from "./format.js";
 
 const ICONS = {
     pass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6 18 18M18 6 6 18"/></svg>',
@@ -15,11 +16,6 @@ const DIRECTION = { pass: "left", hold: "down", cart: "right" };
 const KEYS = { ArrowLeft: "left", ArrowRight: "right", ArrowDown: "down" };
 const WINDOW = 3;
 const REFILL_AT = 3;
-
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
 
 function contextLabel(query) {
     if (query.q) return `Results for “${query.q}”`;

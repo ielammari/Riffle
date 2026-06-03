@@ -1,20 +1,12 @@
 // Renders a full product card (steppable image carousel on a light tile + details).
 
 import { openDetail } from "./detail.js";
+import { esc, money } from "./format.js";
 
 const ARROW_L = "M15 18l-6-6 6-6";
 const ARROW_R = "M9 6l6 6-6 6";
 const STAR = "M12 2.5l2.9 5.9 6.5.95-4.7 4.58 1.1 6.47L12 17.9 6.2 20.9l1.1-6.47L2.6 9.85l6.5-.95z";
 const INFO = "M12 16v-5M12 7.5h.01";
-
-function esc(s) {
-    return String(s).replace(/[&<>"']/g, (ch) =>
-        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
-}
-
-function money(n) {
-    return Number(n || 0).toFixed(2);
-}
 
 function navBtn(dir, label, path) {
     const b = document.createElement("button");
@@ -105,8 +97,6 @@ export function createCard(c) {
         counter.setAttribute("aria-live", "polite");
         const show = (i) => {
             idx = (i + images.length) % images.length;
-            const im = new Image();
-            im.src = images[idx];
             img.src = images[idx];
             counter.textContent = `${idx + 1} / ${images.length}`;
         };

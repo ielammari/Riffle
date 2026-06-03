@@ -53,9 +53,11 @@ body:not([data-route="/"]) .site-footer { display: none; }
 }
 
 .brand__mark {
-    width: 29px;
-    height: 29px;
-    color: var(--color-accent);
+    position: absolute;
+    left: 23px;
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
 }
 
 .brand__name {
