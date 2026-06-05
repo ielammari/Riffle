@@ -32,9 +32,11 @@
         </a>
 
         <nav class="app-nav" aria-label="Primary">
-            <button class="cat-btn" id="nav-browse" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="cat-panel">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M4 7h16M4 12h16M4 17h10" />
+            <button class="cat-btn" id="nav-browse" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="cat-panel" aria-label="Browse categories">
+                <svg class="cat-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line class="cat-btn__bar cat-btn__bar--top" x1="4" y1="7" x2="20" y2="7" />
+                    <line class="cat-btn__bar cat-btn__bar--mid" x1="4" y1="12" x2="20" y2="12" />
+                    <line class="cat-btn__bar cat-btn__bar--bot" x1="4" y1="17" x2="20" y2="17" />
                 </svg>
                 <span class="cat-btn__label">Browse</span>
             </button>

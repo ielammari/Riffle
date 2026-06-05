@@ -104,4 +104,4 @@ def deck():
                            ranking_preset=prefs["ranking"], currency=prefs["currency"])
     except requests.RequestException:
         return jsonify(error="upstream_unavailable"), 502
-    return jsonify({"items": items, "count": len(items)})
+    return jsonify({"items": items, "count": len(items), "limit": limit})

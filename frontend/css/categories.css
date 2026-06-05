@@ -4,7 +4,7 @@
 .cat-overlay {
     position: fixed;
     inset: 0;
-    z-index: 1150;
+    z-index: 90;
 }
 
 .cat-overlay__scrim {
@@ -30,7 +30,7 @@
 }
 
 .cat-overlay--in .cat-overlay__scrim { opacity: 1; }
-.cat-overlay--in .cat-panel { transform: translateY(0); }
+.cat-overlay--in .cat-panel { transform: translateY(0); transition-duration: 900ms; }
 .cat-overlay--out .cat-overlay__scrim { opacity: 0; }
 .cat-overlay--out .cat-panel { transform: translateY(-100%); }
 

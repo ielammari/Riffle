@@ -3,7 +3,7 @@
 import { api } from "./api.js";
 import * as router from "./router.js";
 import { toast, confirmModal } from "./toast.js";
-import { getState, subscribe, setUser, applyCounts } from "./state.js";
+import { getState, subscribe, setUser, applyCounts, syncSecondThoughts } from "./state.js";
 import { renderAuth, setIntended } from "./auth.js";
 import { renderLanding } from "./landing.js";
 import { renderDeck } from "./deck.js";
@@ -177,7 +177,7 @@ renderHeader(getState());
     try { setUser(await api.me()); } catch { setUser(null); }
     router.start();
     if (getState().user) {
-        api.secondThoughts().then(applyCounts).catch(() => {});
+        syncSecondThoughts();
         api.settings().then((d) => applyAppearance(d.settings)).catch(() => {});
     }
 })();

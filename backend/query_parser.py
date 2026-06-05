@@ -48,6 +48,9 @@ _CATEGORY_WORDS = {
     "sports": ["sports-accessories"], "sport": ["sports-accessories"],
 }
 
+_PRICE_ASC = ["lowest price", "lowest-price", "price low to high", "low to high", "cheapest", "least expensive"]
+_PRICE_DESC = ["highest price", "highest-price", "price high to low", "high to low", "most expensive", "dearest"]
+
 _QUALITY = ["highly rated", "top rated", "top-rated", "well rated", "best", "great", "excellent", "good"]
 _DEAL = ["on sale", "deals", "deal", "sale", "discounted", "discounts", "discount", "clearance", "bargain", "promo", "promotion"]
 _CHEAP = ["low cost", "low-cost", "cheap", "budget", "affordable", "inexpensive", "economical"]
@@ -93,6 +96,17 @@ def parse_query(raw, valid_slugs=None):
 
     s = " " + (raw or "").lower().strip() + " "
     min_price, max_price, s = _extract_price(s)
+
+    # Explicit price-sort phrases first, stripped before the keyword rules so subwords
+    for phrase in _PRICE_ASC:
+        if re.search(r"\b" + re.escape(phrase) + r"\b", s):
+            biases["price"] = "asc"
+            s = _strip(r"\b" + re.escape(phrase) + r"\b", s)
+
+    for phrase in _PRICE_DESC:
+        if re.search(r"\b" + re.escape(phrase) + r"\b", s):
+            biases["price"] = "desc"
+            s = _strip(r"\b" + re.escape(phrase) + r"\b", s)
 
     for phrase in _CHEAP:
         if re.search(r"\b" + re.escape(phrase) + r"\b", s):

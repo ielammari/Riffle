@@ -24,7 +24,11 @@ async function openCategories(btn) {
         "</section>";
     document.body.appendChild(root);
     panel = root;
-    if (btn) btn.setAttribute("aria-expanded", "true");
+    if (btn) {
+        btn.setAttribute("aria-expanded", "true");
+        btn.setAttribute("aria-label", "Close categories");
+        btn.classList.add("is-open");
+    }
 
     const onKey = (e) => { if (e.key === "Escape") closeCategories(btn); };
     root.querySelector("[data-close]").addEventListener("click", () => closeCategories(btn));
@@ -66,7 +70,13 @@ export function closeCategories(btn) {
     const root = panel;
     panel = null;
     document.removeEventListener("keydown", root._onKey);
-    (btn || root._btn)?.setAttribute("aria-expanded", "false");
+    const trigger = btn || root._btn;
+    if (trigger) {
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.setAttribute("aria-label", "Browse categories");
+        trigger.classList.remove("is-open");
+        trigger.focus({ preventScroll: true });
+    }
     root.classList.remove("cat-overlay--in");
     root.classList.add("cat-overlay--out");
     setTimeout(() => root.remove(), 300);

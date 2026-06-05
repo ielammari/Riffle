@@ -27,11 +27,11 @@ def _score(p, biases, qtokens, pmin, pmax):
     discount_w = w["discount"] + Config.RANKING_DISCOUNT_BIAS * biases.get("discount", 0.0)
 
     score = (
-        rating_w * rating
-        + w["review"] * review
-        + w["stock"] * in_stock
-        + discount_w * discount
-        + w["query"] * match
+            rating_w * rating
+            + w["review"] * review
+            + w["stock"] * in_stock
+            + discount_w * discount
+            + w["query"] * match
     )
 
     price_pref = biases.get("price")
@@ -54,5 +54,13 @@ def rank(products, spec):
     pmin, pmax = min(prices), max(prices)
 
     scored = [(_score(p, biases, qtokens, pmin, pmax), p) for p in products]
-    scored.sort(key=lambda sp: (-sp[0], -_review_count(sp[1]), sp[1].get("id", 0)))
+
+    # An explicit price preference sorts by price first
+    price_pref = biases.get("price")
+    if price_pref == "asc":
+        scored.sort(key=lambda sp: (sp[1].get("price") or 0, -sp[0], -_review_count(sp[1]), sp[1].get("id", 0)))
+    elif price_pref == "desc":
+        scored.sort(key=lambda sp: (-(sp[1].get("price") or 0), -sp[0], -_review_count(sp[1]), sp[1].get("id", 0)))
+    else:
+        scored.sort(key=lambda sp: (-sp[0], -_review_count(sp[1]), sp[1].get("id", 0)))
     return [p for _, p in scored]

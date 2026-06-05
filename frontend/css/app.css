@@ -30,6 +30,10 @@ input:-webkit-autofill:focus {
     box-shadow: var(--shadow-header);
 }
 
+.app-header:has(.cat-btn.is-open) {
+    background: color-mix(in srgb, var(--color-bg-surface) 90%, transparent);
+}
+
 /* Auth page is a full-screen split: hide the chrome. Footer shows on home only. */
 body[data-route="/login"] .app-header { display: none; }
 body:not([data-route="/"]) .site-footer { display: none; }
@@ -126,6 +130,19 @@ body:not([data-route="/"]) .site-footer { display: none; }
     .cat-btn__label { display: none; }
     .cat-btn { padding: 0; width: 48px; justify-content: center; }
 }
+
+/* BROWSE icon morph */
+.cat-btn__bar {
+    transform-box: view-box;
+    transform-origin: center;
+    transition: transform var(--transition-base), opacity var(--transition-base), stroke-dasharray var(--transition-base);
+}
+
+.cat-btn__bar--bot { stroke-dasharray: 10 20; }
+.cat-btn.is-open .cat-btn__bar--top { transform: rotate(45deg) translateY(5px); }
+.cat-btn.is-open .cat-btn__bar--mid { opacity: 0; }
+
+.cat-btn.is-open .cat-btn__bar--bot { transform: rotate(-45deg) translateY(-5px); stroke-dasharray: 16 20; }
 
 .badge {
     position: absolute;
@@ -254,6 +271,7 @@ body:not([data-route="/"]) .site-footer { display: none; }
 @media (prefers-reduced-motion: reduce) {
     .view-enter,
     .view-enter > * > * { animation: none; }
+    .cat-btn__bar { transition: none; }
     * { scroll-behavior: auto; }
 }
 

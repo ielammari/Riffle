@@ -39,6 +39,45 @@ export function applyCounts(payload) {
     notify();
 }
 
+// App-level Second-Thoughts expiry watch
+let stTimer = null;
+let stSyncing = false;
+
+function clearStTimer() {
+    if (stTimer) { clearTimeout(stTimer); stTimer = null; }
+}
+
+function scheduleSecondThoughts(data) {
+    clearStTimer();
+    const serverNow = Date.parse(data && data.server_now);
+    let soonest = Infinity;
+    for (const it of (data && data.items) || []) {
+        const exp = Date.parse(it.expires_at);
+        if (exp) soonest = Math.min(soonest, exp);
+    }
+    if (!serverNow || soonest === Infinity) return;
+    // Both timestamps are server-clock, so the gap is skew-free
+    stTimer = setTimeout(syncSecondThoughts, Math.max(0, soonest - serverNow) + 250);
+}
+
+export async function syncSecondThoughts() {
+    stTimer = null;
+    if (stSyncing) return;
+    stSyncing = true;
+    try {
+        const data = await api.secondThoughts();
+        applyCounts(data);
+        scheduleSecondThoughts(data);
+    } catch { /* will retry on the next state change */ }
+    finally { stSyncing = false; }
+}
+
+// Start the watch when items exist but nothing is scheduled.
+subscribe((s) => {
+    if (!s.user || s.counts.second_thoughts_count <= 0) { clearStTimer(); return; }
+    if (!stTimer && !stSyncing) syncSecondThoughts();
+});
+
 export async function refreshSession() {
     try {
         state.user = await api.me();
@@ -46,7 +85,7 @@ export async function refreshSession() {
         state.user = null;
     }
     if (state.user) {
-        try { applyCounts(await api.secondThoughts()); } catch { /* offline */ }
+        try { await syncSecondThoughts(); } catch { /* offline */ }
         try {
             const d = await api.settings();
             applyAppearance(d.settings);
