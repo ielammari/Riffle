@@ -65,10 +65,12 @@ export async function renderDeck(view, query) {
     let slots = []; // index 0 = top card; objects { el, item, controller }
     let refilling = false;
     let exhausted = false;
+    let cap = Infinity; // deck-size: max cards in this set
 
     try {
         const data = await api.deck({ q: query.q, category: query.category });
         items = (data && data.items) || [];
+        cap = (data && data.limit) || items.length;
     } catch {
         stack.innerHTML = "";
         stack.appendChild(stateBox("Could not load the deck",
@@ -155,14 +157,17 @@ export async function renderDeck(view, query) {
 
     async function maybeRefill() {
         if (exhausted || refilling || items.length - i > REFILL_AT) return;
+        // Deck size is the cap for the set: never grow past it, so the deck depletes at 'cap'
+        if (items.length >= cap) { exhausted = true; return; }
         refilling = true;
         try {
             const data = await api.deck({ q: query.q, category: query.category });
             const have = new Set(items.map((x) => x.id));
             const fresh = ((data && data.items) || []).filter((x) => !have.has(x.id));
-            if (!fresh.length) exhausted = true;
+            const add = fresh.slice(0, Math.max(0, cap - items.length));
+            if (!add.length) exhausted = true;
             else {
-                items.push(...fresh);
+                items.push(...add);
                 backfill();
                 if (slots.length) setEnabled(true);
             }
