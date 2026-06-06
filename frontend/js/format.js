@@ -5,8 +5,3 @@ export function esc(s) {
     return String(s).replace(/[&<>"']/g, (ch) =>
         ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
 }
-
-// A bare 2-decimal money amount (no currency symbol).
-export function money(n) {
-    return Number(n || 0).toFixed(2);
-}

@@ -12,8 +12,10 @@ import { renderCart } from "./cart.js";
 import { renderSettings } from "./settings.js";
 import { applyAppearance, applyStoredAppearance, clearStoredAppearance } from "./appearance.js";
 import { toggleCategories, closeCategories } from "./categories.js";
+import { ratesReady } from "./currency.js";
 
 applyStoredAppearance();
+ratesReady();
 
 function setBadge(node, n) {
     if (n > 0) { node.textContent = n; node.hidden = false; }

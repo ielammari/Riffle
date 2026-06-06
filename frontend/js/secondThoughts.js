@@ -4,7 +4,8 @@ import { api } from "./api.js";
 import { toast } from "./toast.js";
 import { applyCounts } from "./state.js";
 import { openDetail } from "./detail.js";
-import { esc, money } from "./format.js";
+import { esc } from "./format.js";
+import { formatMoney, ratesReady } from "./currency.js";
 
 const RADIUS = 20;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -33,7 +34,7 @@ function makeRow(item) {
         `<button type="button" class="tray-act tray-act--promote" aria-label="Promote to cart">${CART_ICON}</button>` +
         `<button type="button" class="tray-act tray-act--release" aria-label="Let go">${X_ICON}</button></div>`;
     li.querySelector(".tray-item__title").textContent = item.title || "";
-    li.querySelector(".tray-item__price").textContent = `${item.currency || ""}${money(item.price)}`;
+    li.querySelector(".tray-item__price").textContent = formatMoney(item.price, item.currency);
     li.querySelector(".tray-item__open").addEventListener("click", () => openDetail(item));
     return {
         el: li,
@@ -103,6 +104,7 @@ export async function openTray() {
 
     if (!rows.length) { body.innerHTML = emptyHTML(); return; }
 
+    await ratesReady();
     const list = document.createElement("ul");
     list.className = "tray-list";
     const entries = rows.map(makeRow);
