@@ -40,8 +40,10 @@ export const api = {
     swipe: (productId, direction) => request("POST", "/swipe", { product_id: productId, direction }),
 
     cart: () => request("GET", "/cart"),
+    cartAdd: (productId, qty, addedAt) => request("POST", "/cart", { product_id: productId, qty, added_at: addedAt }),
     cartUpdate: (productId, qty) => request("PATCH", `/cart/${productId}`, { qty }),
     cartRemove: (productId) => request("DELETE", `/cart/${productId}`),
+    checkout: (productIds) => request("POST", "/cart/checkout", { product_ids: productIds }),
 
     secondThoughts: () => request("GET", "/second-thoughts"),
     promote: (productId) => request("POST", `/second-thoughts/${productId}/promote`),

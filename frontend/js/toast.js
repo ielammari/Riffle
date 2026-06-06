@@ -6,7 +6,7 @@ const ICONS = {
     error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>',
 };
 
-export function toast(message, { type = "info", duration = 4000 } = {}) {
+export function toast(message, { type = "info", duration = 4000, actionLabel, onAction } = {}) {
     const region = document.getElementById("toast-region");
     if (!region) return () => {};
 
@@ -16,6 +16,7 @@ export function toast(message, { type = "info", duration = 4000 } = {}) {
     el.innerHTML =
         `<span class="toast__icon">${ICONS[type] || ICONS.info}</span>` +
         `<span class="toast__msg"></span>` +
+        (actionLabel ? `<button class="toast__action" type="button"></button>` : "") +
         `<button class="toast__close" type="button" aria-label="Dismiss">✕</button>`;
     el.querySelector(".toast__msg").textContent = message;
     region.appendChild(el);
@@ -26,6 +27,11 @@ export function toast(message, { type = "info", duration = 4000 } = {}) {
         el.classList.add("toast--out");
         setTimeout(() => el.remove(), 200);
     };
+    if (actionLabel) {
+        const action = el.querySelector(".toast__action");
+        action.textContent = actionLabel;
+        action.addEventListener("click", () => { close(); if (onAction) onAction(); });
+    }
     el.querySelector(".toast__close").addEventListener("click", close);
     if (duration) timer = setTimeout(close, duration);
     return close;

@@ -25,7 +25,53 @@ function notify() {
 
 export function setUser(user) {
     state.user = user;
+    clearCartSelection();
     notify();
+}
+
+// ---- Cart selection: which items will be checked out. Default is "buy everything". ----
+const cartSelection = new Set();   // product ids currently selected
+const cartSeen = new Set();        // ids already accounted for, so new ones can default to selected
+
+export function clearCartSelection() {
+    cartSelection.clear();
+    cartSeen.clear();
+}
+
+// Reconcile against the current cart: drop ids no longer present, and start any
+// newly-added item selected (keeps the default of all-selected).
+export function syncCartSelection(ids) {
+    const present = new Set(ids);
+    for (const id of cartSeen) {
+        if (!present.has(id)) { cartSeen.delete(id); cartSelection.delete(id); }
+    }
+    for (const id of ids) {
+        if (!cartSeen.has(id)) { cartSeen.add(id); cartSelection.add(id); }
+    }
+}
+
+export function isCartSelected(id) { return cartSelection.has(id); }
+
+export function setCartSelected(id, on) {
+    if (on) cartSelection.add(id); else cartSelection.delete(id);
+}
+
+export function selectAllCart(ids, on) {
+    for (const id of ids) { if (on) cartSelection.add(id); else cartSelection.delete(id); }
+}
+
+// Removal drops the id; returns whether it was selected (for undo to restore).
+export function dropCartSelection(id) {
+    const was = cartSelection.has(id);
+    cartSelection.delete(id);
+    cartSeen.delete(id);
+    return was;
+}
+
+// Undo: re-account the id and restore its exact prior selection state.
+export function restoreCartSelection(id, wasSelected) {
+    cartSeen.add(id);
+    if (wasSelected) cartSelection.add(id); else cartSelection.delete(id);
 }
 
 // Accepts any payload that may carry counters (swipe/cart/tray/reset responses).
