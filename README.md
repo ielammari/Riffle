@@ -101,12 +101,12 @@ repo root.
 
 ```bash
 # 1. Clone
-git clone <your-repo-url>
+git clone https://github.com/ielammari/Riffle.git
 cd Riffle
 
 # 2. Create and activate a virtual environment
-python3 -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: venv\Scripts\activate
 
 # 3. Install dependencies
 pip install -r backend/requirements.txt
@@ -118,6 +118,20 @@ The SQLite database is created automatically at `instance/app.db` on first run, 
 
 No installation needed. The files in `frontend/` are served directly by Flask; just open the app in a
 browser once the backend is running (see [Running the app](#running-the-app)).
+
+### JetBrains IDEs
+
+1. **Open the project at the repo root**: `File > Open`, select the `Riffle` folder.
+2. **Mark the repo root as Sources Root** so the absolute `backend.*` imports resolve: right-click the
+   project root in the Project view, then *Mark Directory as > Sources Root* (Might  not be necessary).
+3. **Add the Python interpreter** as a virtualenv: *Settings/Preferences > Project > Python Interpreter >
+   Add Interpreter > Add Local Interpreter > Virtualenv*, create (or point at) `.venv` in the repo root.
+   - **WebStorm** has no Python support out of the box, install the free **Python Community Edition**
+     plugin (*Settings > Plugins > Marketplace*) to get the interpreter and run configurations. If you'd
+     rather not, WebStorm is still ideal for the `frontend/` JS/CSS, just run the backend from the built-in
+     Terminal using the [Backend](#backend) steps.
+4. **Install dependencies** from the Terminal tool window (if the interpreter step didn't):
+   `pip install -r backend/requirements.txt`.
 
 ## Configuration
 
@@ -164,6 +178,17 @@ Quick health check:
 ```bash
 curl http://localhost:5000/api/health
 ```
+
+### JetBrains IDEs (WebStorm, PyCharm, IntelliJ)
+
+Run the backend as a **module from the repo root**:
+
+1. *Run > Edit Configurations > + > Python*.
+2. Switch the target from **Script path** to **Module name** and set it to `backend.app`.
+3. Set the **Working directory** to the repo root and pick the project virtualenv as the interpreter.
+4. **Run**, then open <http://localhost:5000>.
+
+In WebStorm without the **Python plugin**, run it from the Terminal tool window instead: `python -m backend.app`.
 
 ## Usage
 

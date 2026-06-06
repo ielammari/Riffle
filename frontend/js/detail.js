@@ -1,7 +1,8 @@
 // Product detail spotlight: a centered modal over a dimmed backdrop showing the full product.
 // Shared by the deck card (info button), the cart, and Second Thoughts.
 
-import { esc, money } from "./format.js";
+import { esc } from "./format.js";
+import { formatMoney } from "./currency.js";
 
 const ARROW_L = "M15 18l-6-6 6-6";
 const ARROW_R = "M9 6l6 6-6 6";
@@ -24,12 +25,11 @@ function ratingHTML(c) {
         `<span class="detail__rate-count">(${c.review_count || 0} reviews)</span></div>`;
 }
 function priceHTML(c) {
-    const cur = esc(c.currency || "");
     const orig = c.original_price && c.original_price > c.price
-        ? `<span class="detail__orig">${cur}${money(c.original_price)}</span>` : "";
+        ? `<span class="detail__orig">${esc(formatMoney(c.original_price, c.currency))}</span>` : "";
     const off = c.discount_percentage > 0
         ? `<span class="detail__off">-${Math.round(c.discount_percentage)}%</span>` : "";
-    return `<div class="detail__price"><span class="detail__now">${cur}${money(c.price)}</span>${orig}${off}</div>`;
+    return `<div class="detail__price"><span class="detail__now">${esc(formatMoney(c.price, c.currency))}</span>${orig}${off}</div>`;
 }
 function stockHTML(c) {
     const s = c.stock || 0;

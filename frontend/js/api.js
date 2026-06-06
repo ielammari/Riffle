@@ -51,4 +51,6 @@ export const api = {
 
     settings: () => request("GET", "/settings"),
     settingsUpdate: (body) => request("PUT", "/settings", body),
+
+    rates: () => request("GET", "/rates"),
 };

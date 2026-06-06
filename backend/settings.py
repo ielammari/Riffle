@@ -23,10 +23,8 @@ def _validate(patch, base):
         out["st_seconds"] = _clamp_int(patch["st_seconds"], Config.ST_TTL_MIN, Config.ST_TTL_MAX, base["st_seconds"])
     if "ranking" in patch and patch["ranking"] in Config.RANKING_PRESETS:
         out["ranking"] = patch["ranking"]
-    if "currency" in patch:
-        cur = str(patch["currency"]).strip()
-        if 1 <= len(cur) <= 4:
-            out["currency"] = cur
+    if "currency" in patch and patch["currency"] in Config.CURRENCY_OPTIONS:
+        out["currency"] = patch["currency"]
     if "theme" in patch and patch["theme"] in Config.THEME_OPTIONS:
         out["theme"] = patch["theme"]
     if "motion" in patch and patch["motion"] in ("on", "off"):

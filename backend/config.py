@@ -20,7 +20,7 @@ class Config:
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_HTTPONLY = True
 
-    CURRENCY = "$"
+    CURRENCY = "USD"
     DECK_LIMIT_MIN = 5
     DECK_LIMIT_DEFAULT = 30
     DECK_LIMIT_MAX = 50
@@ -45,7 +45,7 @@ class Config:
         "low_price": {"price": "asc", "discount": 0.5},
     }
 
-    CURRENCY_OPTIONS = ["$", "€", "£", "¥", "DH", "kr"]
+    CURRENCY_OPTIONS = ["USD", "EUR", "GBP", "JPY", "MAD", "KRW"]
     THEME_OPTIONS = ["light", "dark"]
 
     SETTINGS_DEFAULTS = {

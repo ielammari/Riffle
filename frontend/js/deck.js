@@ -6,6 +6,7 @@ import { makeSwipeable } from "./swipe.js";
 import { applyCounts } from "./state.js";
 import { toast } from "./toast.js";
 import { esc } from "./format.js";
+import { ratesReady } from "./currency.js";
 
 const ICONS = {
     pass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6 18 18M18 6 6 18"/></svg>',
@@ -71,6 +72,7 @@ export async function renderDeck(view, query) {
         const data = await api.deck({ q: query.q, category: query.category });
         items = (data && data.items) || [];
         cap = (data && data.limit) || items.length;
+        await ratesReady();
     } catch {
         stack.innerHTML = "";
         stack.appendChild(stateBox("Could not load the deck",
