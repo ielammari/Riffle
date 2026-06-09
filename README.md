@@ -15,7 +15,7 @@ fetches all product data **live from [DummyJSON](https://dummyjson.com)** server
 
 ## Table of contents
 
-<!-- - [Screenshots](#screenshots) -->
+- [Preview](#preview)
 - [Features](#features)
 - [Tech stack](#tech-stack)
 - [Project structure](#project-structure)
@@ -30,6 +30,36 @@ fetches all product data **live from [DummyJSON](https://dummyjson.com)** server
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
+## Preview
+###
+<p align="center">
+  <img src="assets/1.png" alt="Riffle landing page" width="1200"><br>
+</p>
+
+<p align="center">
+  <img src="assets/2.png" alt="How Riffle works" width="1200"><br>
+</p>
+
+<p align="center">
+  <img src="assets/3.png" alt="The swipe deck" width="1200"><br>
+</p>
+
+<p align="center">
+  <img src="assets/4.png" alt="Second Thoughts holding area" width="1200"><br>
+</p>
+
+<p align="center">
+  <img src="assets/5.png" alt="Browse by category" width="1200"><br>
+</p>
+
+<p align="center">
+  <img src="assets/6.png" alt="Cart" width="1200"><br>
+</p>
+
+<p align="center">
+  <img src="assets/7.png" alt="Dark theme deck" width="1200"><br>
+</p>
+
 ## Features
 
 - **One-card-at-a-time deck** with three decisive gestures: right to cart, down to Second Thoughts, left to pass.
@@ -43,8 +73,6 @@ fetches all product data **live from [DummyJSON](https://dummyjson.com)** server
 - **Per-user settings**: deck size, Second-Thoughts duration, ranking preset, currency, light/dark theme, and reduced motion.
 - **Reset** that clears the see-once history (keeping the cart) so the deck can be replayed.
 - **No build step**: the frontend is plain HTML/CSS/ES modules served directly by Flask.
-
-<!-- ## Screenshots-->
 
 ## Tech stack
 
@@ -82,6 +110,7 @@ fetches all product data **live from [DummyJSON](https://dummyjson.com)** server
 │   ├── assets/              # Landing/feature mockup images
 │   ├── css/                 # tokens.css (design system) + per-view stylesheets
 │   └── js/                  # ES modules: api, router, state, deck, swipe, cart, etc.
+├── assets/                  # Holds preview footage
 ├── instance/                # app.db created here at runtime (gitignored)
 └── README.md
 ```
@@ -144,13 +173,13 @@ Two settings read from the environment. Keep real secrets out of the repo.
 
 Everything else is defined in [`backend/config.py`](backend/config.py), including:
 
-| Setting                                   | Default                           | Purpose                                          |
-|-------------------------------------------|-----------------------------------|--------------------------------------------------|
-| `CURRENCY`                                | `$`                               | Display currency symbol                          |
-| `DUMMYJSON_BASE` / `REQUEST_TIMEOUT`      | `https://dummyjson.com` / `10`    | Upstream data source and request timeout         |
-| `DECK_LIMIT_MIN/DEFAULT/MAX`              | `10` / `30` / `50`                | Cards returned per deck request                  |
-| `DECK_CANDIDATE_LIMIT`                    | `150`                             | Pool size fetched before ranking                 |
-| `RANKING_WEIGHTS`                         | rating-led blend                  | Deterministic ranking weights                    |
+| Setting                                   | Default                                      | Purpose                                          |
+|-------------------------------------------|----------------------------------------------|--------------------------------------------------|
+| `CURRENCY`                                | `USD`                                        | Display currency symbol                          |
+| `DUMMYJSON_BASE` / `REQUEST_TIMEOUT`      | `https://dummyjson.com` / `10`               | Upstream data source and request timeout         |
+| `DECK_LIMIT_MIN/DEFAULT/MAX`              | `5` / `30` / `50`                            | Cards returned per deck request                  |
+| `DECK_CANDIDATE_LIMIT`                    | `150`                                        | Pool size fetched before ranking                 |
+| `RANKING_WEIGHTS`                         | rating-led blend                             | Deterministic ranking weights                    |
 | `RANKING_PRESETS`                         | balanced / top_rated / best_deals / low_price | Selectable ranking modes in Settings |
 
 The deterministic ranking score (sorted descending; ties broken by review count, then id):
@@ -172,6 +201,8 @@ Then open <http://localhost:5000>.
 > Run as a module (`python -m backend.app`) from the repo root: the backend is a package that uses
 > absolute `backend.*` imports. The backend serves the frontend, so there is **one** process and **one**
 > URL.
+
+> The development server runs with `debug=True` and is meant for local use only; for a real deployment, disable debug and serve the app behind a production WSGI server.
 
 Quick health check:
 
